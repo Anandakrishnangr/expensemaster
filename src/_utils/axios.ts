@@ -1,18 +1,18 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8000', // replace with your backend URL
+  baseURL: '', // replace with your backend URL
 });
 
 axiosInstance.interceptors.request.use(
-  (config) => {
+  (config: any) => {
     const token = localStorage.getItem('token');
     if (token) {
       config.headers['Authorization'] = `Token ${token}`;
     }
     return config;
   },
-  (error) => {
+  (error: any) => {
     return Promise.reject(error);
   }
 );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import axiosInstance from '../_utils/axios'; 
-import { TextField, Button, Box, Typography } from '@mui/material';
+import axiosInstance from '../_utils/axios';
+import { TextField, Button, Box, Typography, Container, Paper } from '@mui/material';
 
 interface LoginResponse {
   token: string;
@@ -39,32 +39,34 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Login
-      </Typography>
-      <TextField
-        label="username"
-        type="username"
-        value={username}
-        onChange={(e) => setusername(e.target.value)}
-        required
-        fullWidth
-        margin="normal"
-      />
-      <TextField
-        label="Password"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        fullWidth
-        margin="normal"
-      />
-      <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-        Login
-      </Button>
-    </Box>
+    <Container component="main" maxWidth="xs">
+      <Paper elevation={3} component="form" onSubmit={handleSubmit} sx={{ mt: 3, p: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          Login
+        </Typography>
+        <TextField
+          label="username"
+          type="username"
+          value={username}
+          onChange={(e) => setusername(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          fullWidth
+          margin="normal"
+        />
+        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+          Login
+        </Button>
+      </Paper>
+    </Container>
   );
 };
 
