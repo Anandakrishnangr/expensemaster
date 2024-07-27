@@ -2,9 +2,18 @@ import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { Button, Container, Grid, Paper, TextField, Typography } from '@mui/material';
+import { loginWithRegister } from '../redux/authSlice';
+import { useDispatch } from 'react-redux';
+import { showSuccessSnackbar, showWarningSnackbar } from '../_components/snackbar/Snackbar';
 
+
+interface User {
+    email: string;
+    username: string;
+}
 interface RegisterResponse {
   token: string;
+  user:User
 }
 
 interface RegisterData {
@@ -23,20 +32,28 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [user, setUser] = useState<string>('');
 
+  let dispatch = useDispatch()
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   const mutation = useMutation<RegisterResponse, unknown, RegisterData>({
     mutationFn: registerUser,
     onSuccess: (data) => {
       // Store the returned token in local storage
+      debugger
+      dispatch(loginWithRegister({
+        username: data.user.username,
+        email: data.user.email,
+        isLoggedIn: true,
+        token: data.token
+    }))
       localStorage.setItem('token', data.token);
-      alert('Registration successful!');
+      showSuccessSnackbar('Registration successful!');
     },
     onError: (error: any) => {
-      alert(`Registration failed: ${error.response?.data?.message || error.message}`);
+      showWarningSnackbar(`Registration failed: ${error.response?.data?.message || error.message}`);
     }
   });
-
+ 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
