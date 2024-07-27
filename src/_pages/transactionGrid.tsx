@@ -46,11 +46,15 @@ const TransactionDataGrid: React.FC = () => {
     const [deleteId, setDeleteId] = useState<number | null>(null);
     const queryClient = useQueryClient();
 
-    const { data: transactions = [], isLoading, error } = useQuery<Transaction[]>('transactions', fetchTransactions);
+    const { data: transactions = [], isLoading, error } = useQuery<Transaction[]>({
+        queryKey: ['transactions'],
+        queryFn: fetchTransactions,
+    });
 
-    const deleteMutation = useMutation<void, unknown, number>(deleteTransaction, {
+    const deleteMutation = useMutation<void, unknown, number>({
+        mutationFn: deleteTransaction,
         onSuccess: () => {
-            queryClient.invalidateQueries('transactions');
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
         },
     });
 
@@ -84,7 +88,7 @@ const TransactionDataGrid: React.FC = () => {
             field: 'actions',
             headerName: 'Actions',
             width: 150,
-            renderCell: (params:any) => (
+            renderCell: (params: any) => (
                 <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(params.row.id)}>
                     Delete
                 </Button>
@@ -92,10 +96,9 @@ const TransactionDataGrid: React.FC = () => {
         },
     ];
 
-    const filteredTransactions = Array.isArray(transactions) ? transactions.filter((transaction:Object) =>
-        transaction
-    // ?.Description?.toLowerCase().includes(searchText.toLowerCase())
-    ) : []
+    const filteredTransactions = transactions.filter((transaction: Transaction) =>
+        transaction.Description.toLowerCase().includes(searchText.toLowerCase())
+    );
 
     return (
         <Container maxWidth="lg">
@@ -117,11 +120,16 @@ const TransactionDataGrid: React.FC = () => {
                         <DataGrid
                             rows={filteredTransactions}
                             columns={columns}
-                            pageSize={10}
-                            rowsPerPageOptions={[10]}
-                            components={{
-                                Toolbar: CustomToolbar,
+                            initialState={{
+                                pagination: {
+                                    paginationModel: {
+                                        pageSize: 5,
+                                    },
+                                },
                             }}
+                            pageSizeOptions={[5]}
+                            checkboxSelection
+                            disableRowSelectionOnClick
                         />
                     </Box>
                 )}
