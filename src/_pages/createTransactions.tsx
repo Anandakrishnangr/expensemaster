@@ -46,7 +46,7 @@ const CreateTransaction: React.FC = () => {
     const { data: categories = [], isLoading: isCategoriesLoading, error: categoriesError } = useQuery<Category[]>({
         queryKey: ['categories'],
         queryFn: fetchCategories,
-      });
+    });
     const mutation = useMutation<void, unknown, TransactionData>({
         mutationFn: createTransaction,
         onSuccess: () => {
@@ -62,14 +62,14 @@ const CreateTransaction: React.FC = () => {
         mutation.mutate({ Description: description, Amount: amount, CategoryID: categoryID, TransactionDate: transactionDate, TransactionType: transactionType });
     };
 
-    if (isCategoriesLoading) {
-        return <CircularProgress />;
-    }
+    // if (isCategoriesLoading) {
+    //     return <CircularProgress />;
+    // }
 
-    if (categoriesError) {
-        return <Typography color="error">Failed to load categories</Typography>;
-    }
-    console.log(categories)
+    // if (categoriesError) {
+    //     return <Typography color="error">Failed to load categories</Typography>;
+    // }
+    // console.log(categories)
 
     return (
         <Container maxWidth="sm">
@@ -96,7 +96,7 @@ const CreateTransaction: React.FC = () => {
                 />
                 <FormControl fullWidth margin="normal">
                     <InputLabel>Category</InputLabel>
-                    <Select
+                    {/* <Select
                         value={categoryID}
                         onChange={(e) => setCategoryID(Number(e.target.value))}
                         required
@@ -106,7 +106,7 @@ const CreateTransaction: React.FC = () => {
                                 {category.Name}
                             </MenuItem>
                         )) : ""}
-                    </Select>
+                    </Select> */}
                 </FormControl>
                 <TextField
                     label="Transaction Date"
@@ -122,14 +122,14 @@ const CreateTransaction: React.FC = () => {
                 />
                 <FormControl fullWidth margin="normal">
                     <InputLabel>Transaction Type</InputLabel>
-                    <Select
+                    {/* <Select
                         value={transactionType}
                         onChange={(e) => setTransactionType(e.target.value)}
                         required
                     >
                         <MenuItem value="Income">Income</MenuItem>
                         <MenuItem value="Expense">Expense</MenuItem>
-                    </Select>
+                    </Select> */}
                 </FormControl>
                 <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
                     Create Transaction
