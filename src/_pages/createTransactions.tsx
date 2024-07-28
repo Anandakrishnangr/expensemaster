@@ -11,7 +11,8 @@ import {
     FormControl,
     InputLabel,
     Container,
-    CircularProgress
+    CircularProgress,
+    Modal
 } from '@mui/material';
 import { CustomAutocomplete } from '../_components/form/inputs/autoComplete';
 import { TextInput } from '../_components';
@@ -110,7 +111,7 @@ const CreateTransaction: React.FC = () => {
                         value={categoryID}
 
                     />
-                 
+
                 </FormControl>
                 <TextField
                     label="Transaction Date"
