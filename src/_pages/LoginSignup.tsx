@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
-import './login.css';
 import Login from './login';
 import Register from './register';
 
@@ -16,7 +15,7 @@ const LoginSignUp: React.FC = () => {
     };
 
     return (
-        <Box className="LoginSign4334" sx={{ height: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box id="loginPage" className="LoginSign4334" sx={{ height: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Box
                 className={`container ${isRightPanelActive ? 'right-panel-active' : ''}`}
                 sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}

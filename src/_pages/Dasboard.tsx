@@ -6,6 +6,7 @@ import CreateCategory from './createCategory';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { darkTheme, lightTheme } from '../_styles/CreateTheme';
 import LabTabs from '../_components/navbar/navbar';
+import TransactionDataGrid from './transactionGrid';
 
 const DashboardHome: React.FC = () => {
 
@@ -21,10 +22,12 @@ const DashboardHome: React.FC = () => {
                     Toggle Theme
                 </Button>
                 <Box className="App">
-                    <LabTabs/>
+                    <LabTabs />
                     <CreateTransaction />
                     <CreateCategory />
                 </Box>
+
+                <TransactionDataGrid />
             </Paper>
         </ThemeProvider>
     );

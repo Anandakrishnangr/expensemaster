@@ -33,12 +33,12 @@ interface Transaction {
 }
 
 const fetchTransactions = async (): Promise<Transaction[]> => {
-    const response = await axiosInstance.get('/transactions/');
+    const response = await axiosInstance.get('api/transactions/');
     return response.data;
 };
 
 const deleteTransaction = async (id: number): Promise<void> => {
-    await axiosInstance.delete(`/delete/${id}`);
+    await axiosInstance.delete(`api/remove/${id}`);
 };
 
 const TransactionDataGrid: React.FC = () => {
