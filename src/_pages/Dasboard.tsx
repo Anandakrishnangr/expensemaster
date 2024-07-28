@@ -9,6 +9,7 @@ import LabTabs from '../_components/navbar/navbar';
 import TransactionDataGrid from './transactionGrid';
 import { Route, Routes } from 'react-router-dom';
 import Manage from './manage';
+import Dashboard from './Dashboard';
 
 const DashboardHome: React.FC = () => {
 
@@ -24,14 +25,14 @@ const DashboardHome: React.FC = () => {
                 <Box className="App">
                     <LabTabs theme={toggleTheme} />
                     <Routes>
+                        <Route path='/' element={<Dashboard />} />
+
                         <Route path='/manage' element={<Manage />} />
                         <Route path='/transactions' element={<TransactionDataGrid />} />
                     </Routes>
-                    <CreateTransaction />
-                    <CreateCategory />
+                   
                 </Box>
 
-                <TransactionDataGrid />
             </Paper>
         </ThemeProvider>
     );
