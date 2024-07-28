@@ -4,7 +4,7 @@ import axiosInstance from '../_utils/axios';
 import { TextField, Button, Box, Typography, Container, Paper } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { login } from '../redux/authSlice';
-import { showWarningSnackbar } from '../_components/snackbar/Snackbar';
+import { showSuccessSnackbar, showWarningSnackbar } from '../_components/snackbar/Snackbar';
 
 interface User {
     email: string;
@@ -39,6 +39,7 @@ const Login: React.FC = () => {
                 token: data.token
             }))
             localStorage.setItem('token', data.token);
+            showSuccessSnackbar("Logged in!")
             // alert('Login successful!');
         },
         onError: (error: any) => {

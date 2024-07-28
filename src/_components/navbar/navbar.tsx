@@ -5,8 +5,11 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import MapComponent from '../map/mapComponent';
-import { Avatar, Button, Menu, MenuItem, Switch, Tab, styled } from '@mui/material';
+import { Avatar, Button, Menu, MenuItem, Switch, Tab, Typography, styled } from '@mui/material';
 import { Logout, Password } from '@mui/icons-material';
+import axiosInstance from '../../_utils/axios';
+import { persistor } from '../../redux/store';
+import { showSuccessSnackbar } from '../snackbar/Snackbar';
 import { useDispatch } from 'react-redux';
 import { openChangePassword } from '../../redux/modalSlice';
 
@@ -95,7 +98,13 @@ export default function LabTabs({ theme }: Labtbs) {
 
     const handleLogout = () => {
         // Add your logout logic here
-        console.log('User logged out');
+        axiosInstance.post("/api/logout/")
+            .then(res => {
+                persistor.purge(); //
+                localStorage.clear()
+                showSuccessSnackbar("Signed out !")
+
+            })
         handleClose();
     };
     let dispatch = useDispatch()
@@ -110,7 +119,7 @@ export default function LabTabs({ theme }: Labtbs) {
             <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', alignItems: "center", justifyContent: "space-between", display: "flex" }}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <span style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)', color: "#FFD700", fontSize: "28x", marginLeft: "15px" }}><i>X</i></span><span>&nbsp; pence Tracker</span>
+                        <Typography sx={{ fontSize: "28px" }} style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)', color: "#FFD700", marginLeft: "15px" }}><i>X</i></Typography><span> pence Tracker</span>
                         <TabList onChange={handleChange} aria-label="lab API tabs example">
                             {TabContent.map((tab, index) => (
                                 <Tab key={index} value={tab.value} label={tab.label}></Tab>

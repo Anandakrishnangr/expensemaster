@@ -7,12 +7,13 @@ import { StyledTextField } from '../../../_styles/input';
 
 interface TextInputProps extends Omit<TextFieldProps, 'variant'> {
     label: string;
+    size: 'small' | 'medium';
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
     onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
     inputType?: 'text' | 'password';
 }
 
-const TextInput: React.FC<TextInputProps> = ({ label, onChange, onBlur, inputType = 'text', ...props }) => {
+const TextInput: React.FC<TextInputProps> = ({ label, onChange, size, onBlur, inputType = 'text', ...props }) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleTogglePasswordVisibility = () => {
@@ -23,12 +24,13 @@ const TextInput: React.FC<TextInputProps> = ({ label, onChange, onBlur, inputTyp
 
     return (
         <StyledTextField
+            size={size}
             variant="outlined"
             label={label}
             onChange={onChange}
             onBlur={onBlur}
             type={isPasswordInput && !showPassword ? 'password' : 'text'}
-           
+
             InputProps={{
                 endAdornment: isPasswordInput ? (
                     <InputAdornment position="end">

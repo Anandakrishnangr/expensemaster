@@ -34,6 +34,7 @@ export const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   console.log({ value, options });
   return (
     <Autocomplete
+      size='small'
       options={options}
       getOptionLabel={(option) => `${option?.Name ?? ''}`}
       isOptionEqualToValue={(option, value) => option.id === value?.id}
