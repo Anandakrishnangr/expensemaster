@@ -13,10 +13,15 @@ import {
     Container,
     CircularProgress
 } from '@mui/material';
+import { CustomAutocomplete } from '../_components/form/inputs/autoComplete';
+import { TextInput } from '../_components';
 
 interface Category {
     id: number;
     Name: string;
+    Description: string;
+    UserID: string;
+    TransactionDate: string;
 }
 
 interface TransactionData {
@@ -39,14 +44,16 @@ const createTransaction = async (transaction: TransactionData): Promise<void> =>
 const CreateTransaction: React.FC = () => {
     const [description, setDescription] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
-    const [categoryID, setCategoryID] = useState<number>(0);
+    const [categoryID, setCategoryID] = useState<any>(null);
     const [transactionDate, setTransactionDate] = useState<string>('');
     const [transactionType, setTransactionType] = useState<string>('Income');
 
     const { data: categories = [], isLoading: isCategoriesLoading, error: categoriesError } = useQuery<Category[]>({
         queryKey: ['categories'],
         queryFn: fetchCategories,
+
     });
+    console.log(categories)
     const mutation = useMutation<void, unknown, TransactionData>({
         mutationFn: createTransaction,
         onSuccess: () => {
@@ -59,7 +66,7 @@ const CreateTransaction: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        mutation.mutate({ Description: description, Amount: amount, CategoryID: categoryID, TransactionDate: transactionDate, TransactionType: transactionType });
+        mutation.mutate({ Description: description, Amount: amount, CategoryID: categoryID.id, TransactionDate: transactionDate, TransactionType: transactionType });
     };
 
     // if (isCategoriesLoading) {
@@ -77,7 +84,7 @@ const CreateTransaction: React.FC = () => {
                 <Typography variant="h4" gutterBottom>
                     Create Transaction
                 </Typography>
-                <TextField
+                <TextInput
                     label="Description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
@@ -85,7 +92,7 @@ const CreateTransaction: React.FC = () => {
                     fullWidth
                     margin="normal"
                 />
-                <TextField
+                <TextInput
                     label="Amount"
                     type="number"
                     value={amount}
@@ -95,18 +102,15 @@ const CreateTransaction: React.FC = () => {
                     margin="normal"
                 />
                 <FormControl fullWidth margin="normal">
-                    <InputLabel>Category</InputLabel>
-                    {/* <Select
+                    <CustomAutocomplete
+                        onChange={(value) => { setCategoryID(value) }}
+                        options={categories}
+                        label='sd'
+                        descriptionLength={20}
                         value={categoryID}
-                        onChange={(e) => setCategoryID(Number(e.target.value))}
-                        required
-                    >
-                        {Array.isArray(categories) ? categories.map((category: Category) => (
-                            <MenuItem key={category.id} value={category.id}>
-                                {category.Name}
-                            </MenuItem>
-                        )) : ""}
-                    </Select> */}
+
+                    />
+                 
                 </FormControl>
                 <TextField
                     label="Transaction Date"
@@ -122,14 +126,14 @@ const CreateTransaction: React.FC = () => {
                 />
                 <FormControl fullWidth margin="normal">
                     <InputLabel>Transaction Type</InputLabel>
-                    {/* <Select
+                    <Select
                         value={transactionType}
                         onChange={(e) => setTransactionType(e.target.value)}
                         required
                     >
                         <MenuItem value="Income">Income</MenuItem>
                         <MenuItem value="Expense">Expense</MenuItem>
-                    </Select> */}
+                    </Select>
                 </FormControl>
                 <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
                     Create Transaction
