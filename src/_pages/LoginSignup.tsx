@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import Login from './login';
 import Register from './register';
+import { Container } from '@mui/system';
 
 const LoginSignUp: React.FC = () => {
     const [isRightPanelActive, setIsRightPanelActive] = useState<boolean>(false);
@@ -28,7 +29,7 @@ const LoginSignUp: React.FC = () => {
                         <Box className="overlay-panel overlay-left">
                             <Typography variant="h4" gutterBottom>Welcome Back!</Typography>
                             <Typography variant="body1">To keep connected with us please login with your personal info</Typography>
-                            <Button variant="outlined" className="ghost" id="signIn" onClick={handleSignInClick}>Sign In</Button>
+                            <Button variant="contained" className="ghost" id="signIn" onClick={handleSignInClick}>Sign In</Button>
                         </Box>
                         <Box className="overlay-panel overlay-right">
                             <Typography variant="h4" gutterBottom>Hello, Friend!</Typography>

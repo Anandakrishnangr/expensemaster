@@ -8,12 +8,12 @@ import { showSuccessSnackbar, showWarningSnackbar } from '../_components/snackba
 
 
 interface User {
-    email: string;
-    username: string;
+  email: string;
+  username: string;
 }
 interface RegisterResponse {
   token: string;
-  user:User
+  user: User
 }
 
 interface RegisterData {
@@ -45,7 +45,7 @@ const Register: React.FC = () => {
         email: data.user.email,
         isLoggedIn: true,
         token: data.token
-    }))
+      }))
       localStorage.setItem('token', data.token);
       showSuccessSnackbar('Registration successful!');
     },
@@ -53,7 +53,7 @@ const Register: React.FC = () => {
       showWarningSnackbar(`Registration failed: ${error.response?.data?.message || error.message}`);
     }
   });
- 
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -75,6 +75,11 @@ const Register: React.FC = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                sx={{
+                  '& .MuiFormLabel-asterisk': {
+                    color: 'red',
+                  },
+                }}
                 size='small'
                 fullWidth
                 variant="outlined"
@@ -86,6 +91,11 @@ const Register: React.FC = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                sx={{
+                  '& .MuiFormLabel-asterisk': {
+                    color: 'red',
+                  },
+                }}
                 size='small'
                 fullWidth
                 variant="outlined"
@@ -98,6 +108,11 @@ const Register: React.FC = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                sx={{
+                  '& .MuiFormLabel-asterisk': {
+                    color: 'red',
+                  },
+                }}
                 size='small'
                 fullWidth
                 variant="outlined"
@@ -110,6 +125,11 @@ const Register: React.FC = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
+                sx={{
+                  '& .MuiFormLabel-asterisk': {
+                    color: 'red',
+                  },
+                }}
                 size='small'
                 fullWidth
                 variant="outlined"
