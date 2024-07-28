@@ -4,6 +4,7 @@ import LoginSignUp from './_pages/LoginSignup';
 import DashboardHome from './_pages/Dasboard';
 import { useSelector } from 'react-redux';
 import { RootState } from './redux/store';
+import Manage from './_pages/manage';
 
 const RouteMap: React.FC = () => {
 
@@ -11,8 +12,10 @@ const RouteMap: React.FC = () => {
     console.log(auth)
     return (
         <Routes>
-            {auth.isLoggedIn ?
+            {auth.isLoggedIn ? <>
                 <Route path="/" element={<DashboardHome />} />
+                <Route path='/manage' element={<Manage />} />
+            </>
                 :
                 <Route path="/" element={<LoginSignUp />} />
             }
