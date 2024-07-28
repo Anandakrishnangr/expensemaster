@@ -1,50 +1,101 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PURGE } from 'redux-persist';
+import axiosInstance from '../_utils/axios';
 
-interface dataState {
-    username: string | null;
-    email: string | null;
-    isLoggedIn: boolean;
-    token: string | null
+// Define the type for a category
+interface Category {
+    id: number;
+    Name: string;
+    Description: string;
+    UserID: string;
+    TransactionDate: string;
 }
 
-const initialState: dataState = {
-    username: null,
-    email: null,
-    isLoggedIn: false,
-    token: null,
+// Define the type for a transaction
+interface TransactionData {
+    Description: string;
+    Amount: number;
+    CategoryID: number;
+    TransactionDate: string;
+    TransactionType: string;
+}
+
+// Define the initial state for categories and transactions
+interface AppState {
+    categories: {
+        Loaded: boolean;
+        data: Category[];
+    };
+    transactions: {
+        Loaded: boolean;
+        data: TransactionData[];
+    };
+}
+
+const INITIAL_STATE: AppState = {
+    categories: {
+        Loaded: false,
+        data: []
+    },
+    transactions: {
+        Loaded: false,
+        data: []
+    }
 };
 
-const dataSlice = createSlice({
-    name: 'data',
-    initialState,
-    reducers: {
-        login(state, action: PayloadAction<{  token: string, isLoggedIn: boolean }>) {
-            state.isLoggedIn = true;
-        },
-        loginWithRegister(state, action: PayloadAction<{ username: string | null; email: string | null, token: string, isLoggedIn: boolean }>) {
-            state.username = action.payload.username;
-            state.email = action.payload.email;
-            state.isLoggedIn = true;
-            state.token = action.payload.token
-        },
-        logout(state) {
-            state.username = null;
-            state.email = null;
-            state.isLoggedIn = false;
-            state.token = null
-        },
-        updateEmail(state, action: PayloadAction<string>) {
-            state.email = action.payload;
-        },
-        updateUsername(state, action: PayloadAction<string>) {
-            state.username = action.payload;
-        },
-    },
+
+
+// Async thunk to fetch categories
+export const fetchCategories = createAsyncThunk<Category[]>(
+    'categories/fetchCategories',
+    async () => {
+        const response = await axiosInstance.get('/api/categories');
+        return response.data; // Assuming response.data is an array of Category
+    }
+);
+
+// Async thunk to fetch transactions
+export const fetchTransactions = createAsyncThunk<TransactionData[]>(
+    'transactions/fetchTransactions',
+    async () => {
+        const response = await axiosInstance.get('/api/transactions');
+        return response.data; // Assuming response.data is an array of TransactionData
+    }
+);
+
+const appSlice = createSlice({
+    name: 'app',
+    initialState: INITIAL_STATE,
+    reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(PURGE, () => initialState); // Handle the PURGE action to reset state
-    },
+        // Handle category-related actions
+        builder
+            .addCase(fetchCategories.pending, (state) => {
+                state.categories.Loaded = false;
+            })
+            .addCase(fetchCategories.fulfilled, (state, action: PayloadAction<Category[]>) => {
+                state.categories.data = action.payload;
+                state.categories.Loaded = true;
+            })
+            .addCase(fetchCategories.rejected, (state) => {
+                state.categories.Loaded = false;
+            })
+
+            // Handle transaction-related actions
+            .addCase(fetchTransactions.pending, (state) => {
+                state.transactions.Loaded = false;
+            })
+            .addCase(fetchTransactions.fulfilled, (state, action: PayloadAction<TransactionData[]>) => {
+                state.transactions.data = action.payload;
+                state.transactions.Loaded = true;
+            })
+            .addCase(fetchTransactions.rejected, (state) => {
+                state.transactions.Loaded = false;
+            })
+
+            // Handle PURGE action
+            .addCase(PURGE, () => INITIAL_STATE);
+    }
 });
 
-export const { login, logout, updateEmail, updateUsername,loginWithRegister } = dataSlice.actions;
-export default dataSlice.reducer;
+export default appSlice.reducer;
