@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
-import { Paper, Button, Box, ThemeProvider } from '@mui/material';
-import LoginSignUp from './LoginSignup';
-import CreateTransaction from './createTransactions';
-import CreateCategory from './createCategory';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Paper, Box, ThemeProvider } from '@mui/material';
 import { darkTheme, lightTheme } from '../_styles/CreateTheme';
 import LabTabs from '../_components/navbar/navbar';
 import TransactionDataGrid from './transactionGrid';
 import { Route, Routes } from 'react-router-dom';
 import Manage from './manage';
 import Dashboard from './Dashboard';
+import { ChangePasswordModal } from '../_components';
 
 const DashboardHome: React.FC = () => {
 
@@ -26,13 +23,11 @@ const DashboardHome: React.FC = () => {
                     <LabTabs theme={toggleTheme} />
                     <Routes>
                         <Route path='/' element={<Dashboard />} />
-
                         <Route path='/manage' element={<Manage />} />
                         <Route path='/transactions' element={<TransactionDataGrid />} />
                     </Routes>
-                   
                 </Box>
-
+                <ChangePasswordModal />
             </Paper>
         </ThemeProvider>
     );

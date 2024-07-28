@@ -7,6 +7,8 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import MapComponent from '../map/mapComponent';
 import { Avatar, Button, Menu, MenuItem, Switch, Tab, styled } from '@mui/material';
 import { Logout, Password } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import { openChangePassword } from '../../redux/modalSlice';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -96,9 +98,11 @@ export default function LabTabs({ theme }: Labtbs) {
         console.log('User logged out');
         handleClose();
     };
+    let dispatch = useDispatch()
     const handleChangePassword = () => {
         // Add your logout logic here
         console.log('Change Password');
+        dispatch(openChangePassword({ open: true }))
         handleClose();
     };
     return (
