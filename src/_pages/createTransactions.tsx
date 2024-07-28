@@ -18,6 +18,10 @@ import {
 import { CustomAutocomplete } from '../_components/form/inputs/autoComplete';
 import { TextInput } from '../_components';
 import { Close } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { openCreateTransactinModal } from '../redux/modalSlice';
+import { showErrorSnackbar, showSuccessSnackbar } from '../_components/snackbar/Snackbar';
 
 interface Category {
     id: number;
@@ -50,20 +54,22 @@ const CreateTransaction: React.FC = () => {
     const [categoryID, setCategoryID] = useState<any>(null);
     const [transactionDate, setTransactionDate] = useState<string>('');
     const [transactionType, setTransactionType] = useState<string>('Income');
+    let open = useSelector((state: RootState) => state.modal.createTransaction)
+    let Dispatch = useDispatch()
+    const handleClose = () => Dispatch(openCreateTransactinModal({ open: false, id: null }))
 
     const { data: categories = [], isLoading: isCategoriesLoading, error: categoriesError } = useQuery<Category[]>({
         queryKey: ['categories'],
         queryFn: fetchCategories,
 
     });
-    console.log(categories)
     const mutation = useMutation<void, unknown, TransactionData>({
         mutationFn: createTransaction,
         onSuccess: () => {
-            alert('Transaction created successfully!');
+            showSuccessSnackbar('Transaction created successfully!');
         },
         onError: (error: any) => {
-            alert(`Failed to create transaction: ${error.response?.data?.message || error.message}`);
+            showErrorSnackbar(`Failed to create transaction: ${error.response?.data?.message || error.message}`);
         }
     });
 
@@ -82,14 +88,14 @@ const CreateTransaction: React.FC = () => {
     // console.log(categories)
 
     return (
-        <Modal open={false}>
+        <Modal open={open.open} onClose={handleClose}>
             <Container maxWidth="sm">
                 <Paper elevation={1} component="form" onSubmit={handleSubmit} sx={{ mt: 3, p: 2 }}>
                     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                         <Typography variant="h4" gutterBottom>
                             Create Transaction
                         </Typography>
-                        <Button><Close sx={{ color: "red", p: 0 }} /></Button>
+                        <Button onClick={handleClose}><Close sx={{ color: "red", p: 0 }} /></Button>
                     </Box>
                     <TextInput
                         size='small'
