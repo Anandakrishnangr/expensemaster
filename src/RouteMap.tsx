@@ -10,16 +10,14 @@ const RouteMap: React.FC = () => {
 
     const auth = useSelector((state: RootState) => state.auth);
     console.log(auth)
-    return (
-        <Routes>
-            {auth.isLoggedIn ? <>
-                <Route path="/" element={<DashboardHome />} />
-                <Route path='/manage' element={<Manage />} />
-            </>
-                :
-                <Route path="/" element={<LoginSignUp />} />
-            }
-        </Routes>
+    return (<>
+        {auth.isLoggedIn ? <>
+            <DashboardHome />
+        </>
+            :
+            <LoginSignUp />
+        }
+    </>
     );
 };
 
