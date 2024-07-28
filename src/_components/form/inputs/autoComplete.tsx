@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from 'react-query';
+// import { useQuery } from 'react-query';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { Typography, Box } from '@mui/material';
@@ -46,7 +46,7 @@ export const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
         </Box>
       )}
       onChange={(event, newValue) => {
-        onChange(newValue ? newValue: null);
+        onChange(newValue ? newValue : null);
       }}
       renderInput={(params) => <TextField {...params} label={label} />}
       value={value}

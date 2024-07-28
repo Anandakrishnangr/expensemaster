@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: '192.168.29.7:8000', // replace with your backend URL
+  baseURL: 'http://192.168.29.7:8000/', // replace with your backend URL
 });
 
 axiosInstance.interceptors.request.use(

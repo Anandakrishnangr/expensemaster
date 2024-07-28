@@ -10,7 +10,7 @@ import TransactionDataGrid from './transactionGrid';
 
 const DashboardHome: React.FC = () => {
 
-    const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+    const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
 
     const toggleTheme = () => {
         setIsDarkMode((prevMode) => !prevMode);
@@ -18,11 +18,9 @@ const DashboardHome: React.FC = () => {
     return (
         <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
             <Paper>
-                <Button variant="contained" onClick={toggleTheme} sx={{ mb: 2 }}>
-                    Toggle Theme
-                </Button>
+
                 <Box className="App">
-                    <LabTabs />
+                    <LabTabs theme={toggleTheme} />
                     <CreateTransaction />
                     <CreateCategory />
                 </Box>

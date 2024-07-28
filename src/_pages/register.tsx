@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { Button, Container, Grid, Paper, TextField, Typography } from '@mui/material';
 import { loginWithRegister } from '../redux/authSlice';
 import { useDispatch } from 'react-redux';
 import { showSuccessSnackbar, showWarningSnackbar } from '../_components/snackbar/Snackbar';
+import axiosInstance from '../_utils/axios';
 
 
 interface User {
@@ -23,7 +23,7 @@ interface RegisterData {
 }
 
 const registerUser = async (userData: RegisterData): Promise<RegisterResponse> => {
-  const response = await axios.post<RegisterResponse>('/api/register/', userData);
+  const response = await axiosInstance.post<RegisterResponse>('api/register/', userData);
   return response.data;
 };
 
