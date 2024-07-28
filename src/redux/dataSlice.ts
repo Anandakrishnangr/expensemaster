@@ -13,11 +13,13 @@ interface Category {
 
 // Define the type for a transaction
 interface TransactionData {
-    Description: string;
+    id: number;
     Amount: number;
     CategoryID: number;
+    Description: string;
     TransactionDate: string;
     TransactionType: string;
+    UserID: number;
 }
 
 // Define the initial state for categories and transactions
