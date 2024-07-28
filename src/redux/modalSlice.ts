@@ -15,6 +15,7 @@ interface ModalProps {
 interface ModalState {
     changePassword: ModalProps;
     createTransaction: DataModal;
+    createCategory: DataModal;
 }
 
 const initialState: ModalState = {
@@ -22,6 +23,10 @@ const initialState: ModalState = {
         open: false
     },
     createTransaction: {
+        id: null,
+        open: false
+    },
+    createCategory: {
         id: null,
         open: false
     }
@@ -34,7 +39,14 @@ const modalSlice = createSlice({
         openChangePassword(state, action: PayloadAction<{ open: boolean }>) {
             state.changePassword.open = action.payload.open
         },
-        
+        openCreateTransactinModal(state, action: PayloadAction<{ open: boolean, id: null | number }>) {
+            state.createTransaction.open = action.payload.open
+            state.createTransaction.id = action.payload.id
+        },
+        openCreateCategory(state, action: PayloadAction<{ open: boolean, id: null | number }>) {
+            state.createCategory.open = action.payload.open
+            state.createCategory.id = action.payload.id
+        },
 
     },
     extraReducers: (builder) => {
