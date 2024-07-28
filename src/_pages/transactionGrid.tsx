@@ -21,6 +21,8 @@ import {
     CircularProgress,
     TextField,
 } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { openCreateTransactinModal } from '../redux/modalSlice';
 
 interface Transaction {
     id: number;
@@ -99,10 +101,14 @@ const TransactionDataGrid: React.FC = () => {
     const filteredTransactions = transactions.filter((transaction: Transaction) =>
         transaction.Description.toLowerCase().includes(searchText.toLowerCase())
     );
-
+    let Dispatch = useDispatch()
+    const handleCreateTransaction = () => {
+        Dispatch(openCreateTransactinModal({ open: true, id: null }))
+    }
     return (
         <Container maxWidth="lg">
             <Box sx={{ mt: 3 }}>
+                <Button variant='contained' onClick={handleCreateTransaction}>Create Trasaction</Button>
                 <TextField
                     label="Search"
                     variant="outlined"
@@ -126,6 +132,10 @@ const TransactionDataGrid: React.FC = () => {
                                         pageSize: 5,
                                     },
                                 },
+                            }}
+                            onRowClick={(e) => {
+                                let id = e.id ? Number(e.id) : null
+                                Dispatch(openCreateTransactinModal({ open: true, id }))
                             }}
                             pageSizeOptions={[5]}
                             checkboxSelection

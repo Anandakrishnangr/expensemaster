@@ -54,5 +54,5 @@ const modalSlice = createSlice({
     },
 });
 
-export const { openChangePassword, } = modalSlice.actions;
+export const { openChangePassword, openCreateTransactinModal, openCreateCategory } = modalSlice.actions;
 export default modalSlice.reducer;

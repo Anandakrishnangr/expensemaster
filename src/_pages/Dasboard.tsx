@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import Manage from './manage';
 import Dashboard from './Dashboard';
 import { ChangePasswordModal } from '../_components';
+import CreateTransaction from './createTransactions';
 
 const DashboardHome: React.FC = () => {
 
@@ -28,6 +29,7 @@ const DashboardHome: React.FC = () => {
                     </Routes>
                 </Box>
                 <ChangePasswordModal />
+                <CreateTransaction />
             </Paper>
         </ThemeProvider>
     );
