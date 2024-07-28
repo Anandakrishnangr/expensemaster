@@ -52,21 +52,27 @@ const Login: React.FC = () => {
     };
 
     return (
-        <Container component="main" maxWidth="xs">
-            <Paper elevation={3} component="form" onSubmit={handleSubmit} sx={{ mt: 3, p: 3 }}>
+        <Container sx={{ boxShadow: "none" }} component="main" maxWidth="xs">
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3, p: 3 }}>
                 <Typography variant="h4" gutterBottom>
                     Login
                 </Typography>
                 <TextField
-                    label="username"
+                    size='small'
+                    label="Username"
                     type="username"
                     value={username}
                     onChange={(e) => setusername(e.target.value)}
                     required
                     fullWidth
-                    margin="normal"
+                    sx={{
+                        '& .MuiFormLabel-asterisk': {
+                            color: 'red',
+                        },
+                    }}
                 />
                 <TextField
+                    size='small'
                     label="Password"
                     type="password"
                     value={password}
@@ -74,11 +80,16 @@ const Login: React.FC = () => {
                     required
                     fullWidth
                     margin="normal"
+                    sx={{
+                        '& .MuiFormLabel-asterisk': {
+                            color: 'red',
+                        },
+                    }}
                 />
                 <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
                     Login
                 </Button>
-            </Paper>
+            </Box>
         </Container>
     );
 };
