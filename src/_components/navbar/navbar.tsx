@@ -7,6 +7,9 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import MapComponent from '../map/mapComponent';
 import { Avatar, Button, Menu, MenuItem, Switch, Tab, Typography, styled } from '@mui/material';
 import { Logout, Password } from '@mui/icons-material';
+import axiosInstance from '../../_utils/axios';
+import { persistor } from '../../redux/store';
+import { showSuccessSnackbar } from '../snackbar/Snackbar';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -93,7 +96,13 @@ export default function LabTabs({ theme }: Labtbs) {
 
     const handleLogout = () => {
         // Add your logout logic here
-        console.log('User logged out');
+        axiosInstance.post("/api/logout/")
+            .then(res => {
+                persistor.purge(); //
+                localStorage.clear()
+                showSuccessSnackbar("Signed out !")
+
+            })
         handleClose();
     };
     const handleChangePassword = () => {

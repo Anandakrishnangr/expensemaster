@@ -12,10 +12,12 @@ import {
     InputLabel,
     Container,
     CircularProgress,
-    Modal
+    Modal,
+    Paper
 } from '@mui/material';
 import { CustomAutocomplete } from '../_components/form/inputs/autoComplete';
 import { TextInput } from '../_components';
+import { Close } from '@mui/icons-material';
 
 interface Category {
     id: number;
@@ -80,67 +82,77 @@ const CreateTransaction: React.FC = () => {
     // console.log(categories)
 
     return (
-        <Container maxWidth="sm">
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                <Typography variant="h4" gutterBottom>
-                    Create Transaction
-                </Typography>
-                <TextInput
-                    label="Description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                    fullWidth
-                    margin="normal"
-                />
-                <TextInput
-                    label="Amount"
-                    type="number"
-                    value={amount}
-                    onChange={(e) => setAmount(Number(e.target.value))}
-                    required
-                    fullWidth
-                    margin="normal"
-                />
-                <FormControl fullWidth margin="normal">
-                    <CustomAutocomplete
-                        onChange={(value) => { setCategoryID(value) }}
-                        options={categories}
-                        label='sd'
-                        descriptionLength={20}
-                        value={categoryID}
-
-                    />
-
-                </FormControl>
-                <TextField
-                    label="Transaction Date"
-                    type="date"
-                    value={transactionDate}
-                    onChange={(e) => setTransactionDate(e.target.value)}
-                    required
-                    fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
-                <FormControl fullWidth margin="normal">
-                    <InputLabel>Transaction Type</InputLabel>
-                    <Select
-                        value={transactionType}
-                        onChange={(e) => setTransactionType(e.target.value)}
+        <Modal open={false}>
+            <Container maxWidth="sm">
+                <Paper elevation={1} component="form" onSubmit={handleSubmit} sx={{ mt: 3, p: 2 }}>
+                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                        <Typography variant="h4" gutterBottom>
+                            Create Transaction
+                        </Typography>
+                        <Button><Close sx={{ color: "red", p: 0 }} /></Button>
+                    </Box>
+                    <TextInput
+                        size='small'
+                        label="Description"
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
                         required
-                    >
-                        <MenuItem value="Income">Income</MenuItem>
-                        <MenuItem value="Expense">Expense</MenuItem>
-                    </Select>
-                </FormControl>
-                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-                    Create Transaction
-                </Button>
-            </Box>
-        </Container>
+                        fullWidth
+                        margin="normal"
+                    />
+                    <TextInput
+                        size='small'
+                        label="Amount"
+                        type="number"
+                        value={amount}
+                        onChange={(e) => setAmount(Number(e.target.value))}
+                        required
+                        fullWidth
+                        margin="normal"
+                    />
+                    <FormControl fullWidth margin="normal">
+                        <CustomAutocomplete
+                            onChange={(value) => { setCategoryID(value) }}
+                            options={categories}
+                            label='sd'
+                            descriptionLength={20}
+                            value={categoryID}
+
+                        />
+
+                    </FormControl>
+                    <TextField
+                        size='small'
+                        label="Transaction Date"
+                        type="date"
+                        value={transactionDate}
+                        onChange={(e) => setTransactionDate(e.target.value)}
+                        required
+                        fullWidth
+                        margin="normal"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <FormControl fullWidth margin="normal">
+                        <InputLabel>Transaction Type</InputLabel>
+                        <Select
+                            label="Transaction Type"
+                            size='small'
+                            value={transactionType}
+                            onChange={(e) => setTransactionType(e.target.value)}
+                            required
+                        >
+                            <MenuItem value="Income">Income</MenuItem>
+                            <MenuItem value="Expense">Expense</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+                        Create Transaction
+                    </Button>
+                </Paper>
+            </Container>
+        </Modal>
     );
 };
 
