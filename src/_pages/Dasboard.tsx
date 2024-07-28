@@ -17,8 +17,8 @@ const DashboardHome: React.FC = () => {
     const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
     const dispatch: AppDispatch = useDispatch();
     let fetch = async () => {
-       dispatch(fetchCategories())
-       dispatch(fetchTransactions())
+        dispatch(fetchCategories())
+        dispatch(fetchTransactions())
 
     }
     useEffect(() => {
