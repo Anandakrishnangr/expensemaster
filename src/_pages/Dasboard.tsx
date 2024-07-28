@@ -11,14 +11,15 @@ import CreateTransaction from './createTransactions';
 import { useDispatch } from 'react-redux';
 import { fetchCategories, fetchTransactions } from '../redux/dataSlice';
 import { AppDispatch } from '../redux/store';
+import CreateCategory from './createCategory';
 
 const DashboardHome: React.FC = () => {
 
     const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
     const dispatch: AppDispatch = useDispatch();
     let fetch = async () => {
-       dispatch(fetchCategories())
-       dispatch(fetchTransactions())
+        dispatch(fetchCategories())
+        dispatch(fetchTransactions())
 
     }
     useEffect(() => {
@@ -46,6 +47,7 @@ const DashboardHome: React.FC = () => {
                 </Box>
                 <ChangePasswordModal />
                 <CreateTransaction />
+                <CreateCategory />
             </Paper>
         </ThemeProvider>
     );

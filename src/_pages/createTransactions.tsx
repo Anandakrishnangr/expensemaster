@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../_utils/axios';
 import {
     TextField,
@@ -32,6 +32,7 @@ interface Category {
 }
 
 interface TransactionData {
+    id?: number | null
     Description: string;
     Amount: number;
     CategoryID: number;
@@ -39,34 +40,45 @@ interface TransactionData {
     TransactionType: string;
 }
 
+
+
 const fetchCategories = async (): Promise<Category[]> => {
     const response = await axiosInstance.get('api/categories/');
     return response.data;
 };
 
-const createTransaction = async (transaction: TransactionData): Promise<void> => {
-    await axiosInstance.post('api/insert/', transaction);
-};
 
 const CreateTransaction: React.FC = () => {
+    let open = useSelector((state: RootState) => state.modal.createTransaction)
+    console.log(open.data)
+    let datas = open.data
     const [description, setDescription] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
     const [categoryID, setCategoryID] = useState<any>(null);
     const [transactionDate, setTransactionDate] = useState<string>('');
     const [transactionType, setTransactionType] = useState<string>('Income');
-    let open = useSelector((state: RootState) => state.modal.createTransaction)
     let Dispatch = useDispatch()
-    const handleClose = () => Dispatch(openCreateTransactinModal({ open: false, id: null }))
+    const queryClient = useQueryClient();
+    const handleClose = () => Dispatch(openCreateTransactinModal({ open: false, id: null, data: null }))
 
+    const createTransaction = async (transaction: TransactionData): Promise<void> => {
+        delete transaction.id
+        await axiosInstance.post('api/insert/', transaction)
+    };
+    const updateTransaction = async (transaction: TransactionData): Promise<void> => {
+        await axiosInstance.put('/api/update/', transaction)
+    };
     const { data: categories = [], isLoading: isCategoriesLoading, error: categoriesError } = useQuery<Category[]>({
         queryKey: ['categories'],
         queryFn: fetchCategories,
 
     });
     const mutation = useMutation<void, unknown, TransactionData>({
-        mutationFn: createTransaction,
+        mutationFn: open.id == null ? createTransaction : updateTransaction,
         onSuccess: () => {
             showSuccessSnackbar('Transaction created successfully!');
+            queryClient.invalidateQueries({ queryKey: ['transactions'] });
+            handleClose()
         },
         onError: (error: any) => {
             showErrorSnackbar(`Failed to create transaction: ${error.response?.data?.message || error.message}`);
@@ -75,8 +87,25 @@ const CreateTransaction: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        mutation.mutate({ Description: description, Amount: amount, CategoryID: categoryID.id, TransactionDate: transactionDate, TransactionType: transactionType });
+        mutation.mutate({ Description: description, Amount: amount, CategoryID: categoryID?.id ?? categoryID, TransactionDate: transactionDate, TransactionType: transactionType, id: open?.id });
     };
+    function formatDate(dateString: string): string {
+        const date = new Date(dateString);
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // getUTCMonth() returns 0-based month, so add 1
+        const day = String(date.getUTCDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    }
+    useEffect(() => {
+        if (datas) {
+            setDescription(datas.Description)
+            setAmount(datas.Amount)
+            setCategoryID(datas.CategoryID)
+            setTransactionDate(formatDate(datas.TransactionDate))
+            setTransactionType(datas.TransactionType)
+        }
+    }, [datas])
 
     // if (isCategoriesLoading) {
     //     return <CircularProgress />;
@@ -93,7 +122,7 @@ const CreateTransaction: React.FC = () => {
                 <Paper elevation={1} component="form" onSubmit={handleSubmit} sx={{ mt: 3, p: 2 }}>
                     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                         <Typography variant="h4" gutterBottom>
-                            Create Transaction
+                            {open.id == null ? "Create Transaction" : "Update Transaction"}
                         </Typography>
                         <Button onClick={handleClose}><Close sx={{ color: "red", p: 0 }} /></Button>
                     </Box>
@@ -132,7 +161,10 @@ const CreateTransaction: React.FC = () => {
                         label="Transaction Date"
                         type="date"
                         value={transactionDate}
-                        onChange={(e) => setTransactionDate(e.target.value)}
+                        onChange={(e) => {
+                            console.log(e.target.value)
+                            setTransactionDate(e.target.value)
+                        }}
                         required
                         fullWidth
                         margin="normal"
@@ -154,7 +186,7 @@ const CreateTransaction: React.FC = () => {
                         </Select>
                     </FormControl>
                     <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-                        Create Transaction
+                        {open.id == null ? "Create Transaction" : "Update Transaction"}
                     </Button>
                 </Paper>
             </Container>

@@ -24,7 +24,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { openCreateTransactinModal } from '../redux/modalSlice';
 
-interface Transaction {
+export interface Transaction {
     id: number;
     Amount: number;
     CategoryID: number;
@@ -78,20 +78,35 @@ const TransactionDataGrid: React.FC = () => {
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchText(event.target.value);
     };
+    function formatDate(dateString: string): string {
+        const date = new Date(dateString);
+        const year = date.getUTCFullYear();
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // getUTCMonth() returns 0-based month, so add 1
+        const day = String(date.getUTCDate()).padStart(2, '0');
 
+        return `${year}-${month}-${day}`;
+    }
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'Amount', headerName: 'Amount', width: 130 },
         { field: 'CategoryID', headerName: 'Category ID', width: 130 },
         { field: 'Description', headerName: 'Description', width: 200 },
-        { field: 'TransactionDate', headerName: 'Transaction Date', width: 180 },
+        {
+            field: 'TransactionDate', headerName: 'Transaction Date', width: 180,
+            renderCell: (params) => {
+                return <span>{formatDate(params.value)}</span>;
+            },
+        },
         { field: 'TransactionType', headerName: 'Transaction Type', width: 150 },
         {
             field: 'actions',
             headerName: 'Actions',
             width: 150,
             renderCell: (params: any) => (
-                <Button variant="contained" color="secondary" onClick={() => handleDeleteClick(params.row.id)}>
+                <Button variant="contained" color="secondary" onClick={(e) => {
+                    e.stopPropagation()
+                    handleDeleteClick(params.row.id)
+                }}>
                     Delete
                 </Button>
             ),
@@ -103,7 +118,7 @@ const TransactionDataGrid: React.FC = () => {
     );
     let Dispatch = useDispatch()
     const handleCreateTransaction = () => {
-        Dispatch(openCreateTransactinModal({ open: true, id: null }))
+        Dispatch(openCreateTransactinModal({ open: true, id: null, data: null }))
     }
     return (
         <Container maxWidth="lg">
@@ -135,7 +150,7 @@ const TransactionDataGrid: React.FC = () => {
                             }}
                             onRowClick={(e) => {
                                 let id = e.id ? Number(e.id) : null
-                                Dispatch(openCreateTransactinModal({ open: true, id }))
+                                Dispatch(openCreateTransactinModal({ open: true, id, data: e.row }))
                             }}
                             pageSizeOptions={[5]}
                             checkboxSelection

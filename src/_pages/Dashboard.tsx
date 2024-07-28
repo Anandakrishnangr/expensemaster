@@ -8,7 +8,7 @@ import { openCreateTransactinModal } from '../redux/modalSlice'
 const Dashboard = () => {
   let Dispatch = useDispatch()
   const handleCreateTransaction = () => {
-    Dispatch(openCreateTransactinModal({ open: true, id: null }))
+    Dispatch(openCreateTransactinModal({ open: true, id: null, data: null }))
   }
   return (
     <div>
