@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Paper, Box, ThemeProvider } from '@mui/material';
 import { darkTheme, lightTheme } from '../_styles/CreateTheme';
 import LabTabs from '../_components/navbar/navbar';
@@ -8,10 +8,26 @@ import Manage from './manage';
 import Dashboard from './Dashboard';
 import { ChangePasswordModal } from '../_components';
 import CreateTransaction from './createTransactions';
+import { useDispatch } from 'react-redux';
+import { fetchCategories, fetchTransactions } from '../redux/dataSlice';
+import { AppDispatch } from '../redux/store';
 
 const DashboardHome: React.FC = () => {
 
     const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
+    const dispatch: AppDispatch = useDispatch();
+    let fetch = async () => {
+       dispatch(fetchCategories())
+       dispatch(fetchTransactions())
+
+    }
+    useEffect(() => {
+
+        fetch()
+        return () => {
+
+        }
+    }, [])
 
     const toggleTheme = () => {
         setIsDarkMode((prevMode) => !prevMode);
