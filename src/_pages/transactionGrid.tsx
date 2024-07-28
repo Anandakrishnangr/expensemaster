@@ -21,6 +21,8 @@ import {
     CircularProgress,
     TextField,
 } from '@mui/material';
+import { openCreateTransactinModal } from '../redux/modalSlice';
+import { useDispatch } from 'react-redux';
 
 export interface Transaction {
     id: number;
