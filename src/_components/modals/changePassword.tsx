@@ -13,6 +13,8 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { openChangePassword } from '../../redux/modalSlice';
 import { RootState } from '../../redux/store';
+import axiosInstance from '../../_utils/axios';
+import { showSuccessSnackbar, showWarningSnackbar } from '../snackbar/Snackbar';
 
 
 export const ChangePasswordModal: React.FC = () => {
@@ -30,19 +32,18 @@ export const ChangePasswordModal: React.FC = () => {
         }
 
         try {
-            const response = await axios.post('/api/change-password', {
-                current_password: currentPassword,
+            const response = await axiosInstance.post('/api/change-password/', {
                 new_password: newPassword,
-                confirm_password: confirmPassword,
+                old_password: currentPassword,
             });
 
             if (response.status === 200) {
-                alert('Password changed successfully!');
+                showSuccessSnackbar('Password changed successfully!');
                 handleClose();
             }
         } catch (error) {
             console.error('Error changing password:', error);
-            setError('Error changing password. Please try again.');
+            showWarningSnackbar('Error changing password. Please try again.');
         }
     };
 
