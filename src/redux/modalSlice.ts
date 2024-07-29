@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { PURGE } from 'redux-persist';
 import { Transaction } from '../_pages/transactionGrid';
+import { CategoryData } from '../_pages/createCategory';
 
 
 interface DataModalTransaction {
@@ -12,7 +13,7 @@ interface DataModalTransaction {
 interface DataModalCategory {
     id: number | null;
     open: boolean
-    data: object | null
+    data: CategoryData | null
 }
 interface ModalProps {
     open: boolean
@@ -53,7 +54,7 @@ const modalSlice = createSlice({
             state.createTransaction.id = action.payload.id
             state.createTransaction.data = action.payload.data
         },
-        openCreateCategory(state, action: PayloadAction<{ open: boolean, id: null | number, data: object | null }>) {
+        openCreateCategory(state, action: PayloadAction<{ open: boolean, id: null | number, data: CategoryData | null }>) {
             state.createCategory.open = action.payload.open
             state.createCategory.id = action.payload.id
             state.createCategory.data = action.payload.data
