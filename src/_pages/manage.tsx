@@ -68,7 +68,7 @@ const Manage: React.FC = () => {
 
     return (
         <>
-            <Box sx={{ m: 1, border: '1px solid black' }}>
+            <Box sx={{ m: 1, height: "100vh", border: '1px solid black' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', border: '1px solid black', padding: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <CallMadeIcon color='success' />

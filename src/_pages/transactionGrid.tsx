@@ -147,7 +147,7 @@ const TransactionDataGrid: React.FC = () => {
                             initialState={{
                                 pagination: {
                                     paginationModel: {
-                                        pageSize: 5,
+                                        pageSize: 10,
                                     },
                                 },
                             }}
@@ -155,7 +155,7 @@ const TransactionDataGrid: React.FC = () => {
                                 let id = e.id ? Number(e.id) : null
                                 Dispatch(openCreateTransactinModal({ open: true, id, data: e.row }))
                             }}
-                            pageSizeOptions={[5]}
+                            pageSizeOptions={[10, 20, 50]}
                             checkboxSelection
                             disableRowSelectionOnClick
                         />

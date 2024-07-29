@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../_utils/axios';
 import { TextField, Button, Box, Typography, Container, CircularProgress, Modal, Paper } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +9,7 @@ import { RootState } from '../redux/store';
 import { Close } from '@mui/icons-material';
 
 export interface CategoryData {
+  id?: number | null;
   Description: string;
   Name: string;
   TransactionDate: string;
@@ -25,17 +26,22 @@ interface TransactionData {
 const addCategory = async (category: CategoryData): Promise<void> => {
   await axiosInstance.post('api/insertCategory/', category);
 };
+const updateCategory = async (category: CategoryData): Promise<void> => {
+  await axiosInstance.put('api/updateCategory/', category);
+};
 
 const CreateCategory: React.FC = () => {
   const [description, setDescription] = useState<string>('');
   const [name, setName] = useState<string>('');
   let open = useSelector((state: RootState) => state.modal.createCategory)
   let datas = open
-  console.log(open)
+  const queryClient = useQueryClient();
   const mutation = useMutation<void, unknown, CategoryData>({
-    mutationFn: addCategory,
+    mutationFn: open.id == null ? addCategory : updateCategory,
     onSuccess: () => {
       showSuccessSnackbar('Category added successfully!');
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      handleClose()
     },
     onError: (error: any) => {
       showWarningSnackbar(`Failed to add category: ${error.response?.data?.message || error.message}`);
@@ -47,11 +53,16 @@ const CreateCategory: React.FC = () => {
   const handleAddCategory = (e: React.FormEvent) => {
     e.preventDefault();
     const currentDate = new Date().toISOString().split('T')[0];
-    mutation.mutate({
+    open.id == null ? mutation.mutate({
       Description: description,
       Name: name,
       TransactionDate: currentDate,
-    });
+    }) : mutation.mutate({
+      id: open.id,
+      Description: description,
+      Name: name,
+      TransactionDate: currentDate,
+    })
   };
   useEffect(() => {
     if (datas) {
