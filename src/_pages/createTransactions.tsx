@@ -30,7 +30,6 @@ interface Category {
     UserID: string;
     TransactionDate: string;
 }
-
 interface TransactionData {
     id?: number | null
     Description: string;
@@ -40,8 +39,6 @@ interface TransactionData {
     TransactionType: string;
 }
 
-
-
 const fetchCategories = async (): Promise<Category[]> => {
     const response = await axiosInstance.get('api/categories/');
     return response.data;
@@ -50,7 +47,6 @@ const fetchCategories = async (): Promise<Category[]> => {
 
 const CreateTransaction: React.FC = () => {
     let open = useSelector((state: RootState) => state.modal.createTransaction)
-    console.log(open.data)
     let datas = open.data
     const [description, setDescription] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
