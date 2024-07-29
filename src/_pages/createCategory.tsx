@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import axiosInstance from '../_utils/axios';
-import { TextField, Button, Box, Typography, Container, CircularProgress, Modal } from '@mui/material';
+import { TextField, Button, Box, Typography, Container, CircularProgress, Modal, Paper } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { showSuccessSnackbar, showWarningSnackbar } from '../_components/snackbar/Snackbar';
 import { openCreateCategory } from '../redux/modalSlice';
 import { RootState } from '../redux/store';
+import { Close } from '@mui/icons-material';
 
 interface CategoryData {
   Description: string;
@@ -21,6 +22,7 @@ const CreateCategory: React.FC = () => {
   const [description, setDescription] = useState<string>('');
   const [name, setName] = useState<string>('');
   let open = useSelector((state: RootState) => state.modal.createCategory)
+  let datas = open
   console.log(open)
   const mutation = useMutation<void, unknown, CategoryData>({
     mutationFn: addCategory,
@@ -43,15 +45,27 @@ const CreateCategory: React.FC = () => {
       TransactionDate: currentDate,
     });
   };
-
+  useEffect(() => {
+    if (datas) {
+      // setDescription(datas.Description)
+      // setName(datas.Amount)
+      // setCategoryID(datas.CategoryID)
+      // setTransactionDate(formatDate(datas.TransactionDate))
+      // setTransactionType(datas.TransactionType)
+    }
+  }, [datas])
   return (
     <Modal open={open.open} onClose={handleClose}>
       <Container maxWidth="sm">
-        <Box component="form" onSubmit={handleAddCategory} sx={{ mt: 3 }}>
-          <Typography variant="h4" gutterBottom>
-            Add Category
-          </Typography>
+        <Paper elevation={1} component="form" onSubmit={handleAddCategory} sx={{ mt: 3, p: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="h4" gutterBottom>
+              {open.id == null ? "Add Category" : "Update Category"}
+            </Typography>
+            <Button onClick={handleClose}><Close sx={{ color: "red", p: 0 }} /></Button>
+          </Box>
           <TextField
+            size='small'
             label="Description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -60,6 +74,7 @@ const CreateCategory: React.FC = () => {
             margin="normal"
           />
           <TextField
+            size='small'
             label="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -71,10 +86,10 @@ const CreateCategory: React.FC = () => {
             <CircularProgress />
           ) : (
             <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-              Add Category
+              {open.id == null ? "Add Category" : "Update Category"}
             </Button>
           )}
-        </Box>
+        </Paper>
       </Container>
     </Modal>
   );

@@ -56,6 +56,8 @@ const modalSlice = createSlice({
         openCreateCategory(state, action: PayloadAction<{ open: boolean, id: null | number, data: object | null }>) {
             state.createCategory.open = action.payload.open
             state.createCategory.id = action.payload.id
+            state.createCategory.data = action.payload.data
+
         },
 
     },
