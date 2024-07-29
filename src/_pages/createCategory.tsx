@@ -8,12 +8,20 @@ import { openCreateCategory } from '../redux/modalSlice';
 import { RootState } from '../redux/store';
 import { Close } from '@mui/icons-material';
 
-interface CategoryData {
+export interface CategoryData {
   Description: string;
   Name: string;
   TransactionDate: string;
 }
 
+interface TransactionData {
+  id?: number | null
+  Description: string;
+  Amount: number;
+  CategoryID: number;
+  TransactionDate: string;
+  TransactionType: string;
+}
 const addCategory = async (category: CategoryData): Promise<void> => {
   await axiosInstance.post('api/insertCategory/', category);
 };
@@ -47,8 +55,8 @@ const CreateCategory: React.FC = () => {
   };
   useEffect(() => {
     if (datas) {
-      // setDescription(datas.Description)
-      // setName(datas.Amount)
+      setDescription(datas.data?.Description ?? '')
+      setName(datas.data?.Name ?? '')
       // setCategoryID(datas.CategoryID)
       // setTransactionDate(formatDate(datas.TransactionDate))
       // setTransactionType(datas.TransactionType)

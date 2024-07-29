@@ -9,6 +9,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch } from 'react-redux';
 import { openCreateCategory } from '../redux/modalSlice';
+import { CategoryData } from './createCategory';
 
 interface Category {
     id: number;
@@ -52,7 +53,7 @@ const Manage: React.FC = () => {
         setOpen(false);
     };
 
-    const handleEdit = (id: number, e: object) => {
+    const handleEdit = (id: number, e: CategoryData) => {
         // Implement your edit logic here
         Dispatch(openCreateCategory({ open: true, id, data: e }))
         console.log('Edit category', e);
