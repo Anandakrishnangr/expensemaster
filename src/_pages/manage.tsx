@@ -7,6 +7,8 @@ import CallReceivedIcon from '@mui/icons-material/CallReceived';
 import AddIcon from '@mui/icons-material/Add';
 import CreateIcon from '@mui/icons-material/Create';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useDispatch } from 'react-redux';
+import { openCreateCategory } from '../redux/modalSlice';
 
 interface Category {
     id: number;
@@ -40,7 +42,7 @@ const Manage: React.FC = () => {
         queryClient.invalidateQueries({ queryKey: ['categories'] });
         setOpen(false);
     };
-
+    let Dispatch = useDispatch()
     const handleOpenDialog = (id: number) => {
         setSelectedCategoryId(id);
         setOpen(true);
@@ -50,9 +52,14 @@ const Manage: React.FC = () => {
         setOpen(false);
     };
 
-    const handleEdit = (id: number) => {
+    const handleEdit = (id: number, e: object) => {
         // Implement your edit logic here
-        console.log('Edit category', id);
+        Dispatch(openCreateCategory({ open: true, id, data: e }))
+        console.log('Edit category', e);
+    };
+    const handelCreateCategory = () => {
+        // Implement your edit logic here
+        Dispatch(openCreateCategory({ open: true, id: null, data: null }))
     };
 
     if (isLoading) return <div>Loading...</div>;
@@ -65,10 +72,10 @@ const Manage: React.FC = () => {
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <CallMadeIcon color='success' />
                         <Typography sx={{ fontSize: '20px', fontFamily: 'cursive', fontWeight: 'bold' }}>
-                             Categories
+                            Categories
                         </Typography>
                     </Box>
-                    <Button variant='outlined'>
+                    <Button onClick={handelCreateCategory} variant='outlined'>
                         <AddIcon /> Create Category
                     </Button>
                 </Box>
@@ -79,7 +86,7 @@ const Manage: React.FC = () => {
                             <Grid item xs={12} sm={6} md={4} lg={3} key={category.id} sx={{}}>
                                 <Box sx={{ margin: '2px', border: '1px solid black' }}>
                                     <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
-                                        <Button onClick={() => handleEdit(category.id)}>
+                                        <Button onClick={() => handleEdit(category.id, category)}>
                                             <CreateIcon />
                                         </Button>
                                     </Box>
@@ -97,7 +104,7 @@ const Manage: React.FC = () => {
                 </Box>
             </Box>
 
-         
+
 
             <Dialog open={open} onClose={handleCloseDialog}>
                 <DialogTitle>Confirm Deletion</DialogTitle>

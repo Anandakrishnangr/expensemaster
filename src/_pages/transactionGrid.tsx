@@ -21,8 +21,8 @@ import {
     CircularProgress,
     TextField,
 } from '@mui/material';
-import { openCreateTransactinModal } from '../redux/modalSlice';
 import { useDispatch } from 'react-redux';
+import { openCreateTransactinModal } from '../redux/modalSlice';
 
 export interface Transaction {
     id: number;
@@ -122,15 +122,19 @@ const TransactionDataGrid: React.FC = () => {
     }
     return (
         <Container maxWidth="lg">
-            <Box sx={{ mt: 3 }}>
-                <TextField
-                    label="Search"
-                    variant="outlined"
-                    fullWidth
-                    margin="normal"
-                    value={searchText}
-                    onChange={handleSearch}
-                />
+            <Box>
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "5px" }}>
+                    <Button sx={{ whiteSpace: "nowrap", pl: 3, pr: 3, fontSize: "12px" }} variant='contained' onClick={handleCreateTransaction}>Create Trasaction</Button>
+                    <TextField
+                        size='small'
+                        label="Search"
+                        variant="outlined"
+                        fullWidth
+                        margin="normal"
+                        value={searchText}
+                        onChange={handleSearch}
+                    />
+                </Box>
                 {isLoading ? (
                     <CircularProgress />
                 ) : error ? (
