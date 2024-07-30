@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../_utils/axios';
-import { Box, Button, Grid, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Box, Button, Grid, Card, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import CallReceivedIcon from '@mui/icons-material/CallReceived';
 import AddIcon from '@mui/icons-material/Add';
@@ -85,7 +85,7 @@ const Manage: React.FC = () => {
                     <Grid container sx={{ m: 0, width: '100%' }}>
                         {categories?.map((category) => (
                             <Grid item xs={12} sm={6} md={4} lg={3} key={category.id} sx={{}}>
-                                <Box sx={{ margin: '2px', border: '1px solid black' }}>
+                                <Card sx={{ margin: '2px', border: '1px solid black' }}>
                                     <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
                                         <Button onClick={() => handleEdit(category.id, category)}>
                                             <CreateIcon />
@@ -98,7 +98,7 @@ const Manage: React.FC = () => {
                                     <Button fullWidth onClick={() => handleOpenDialog(category.id)}>
                                         <DeleteIcon /> Delete
                                     </Button>
-                                </Box>
+                                </Card>
                             </Grid>
                         ))}
                     </Grid>

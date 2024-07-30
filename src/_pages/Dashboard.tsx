@@ -175,7 +175,7 @@ const DashBoard: React.FC = () => {
   if (transactionsError || categoriesError) return <div>Error loading data</div>;
 
   return (
-    <>
+    <Box sx={{ m: 0 }}>
       <Box sx={{ m: 1, border: '1px solid black', padding: 2 }}>
         <Typography variant="h6" sx={{ textAlign: 'center' }}>Account Summary</Typography>
         <Typography>Income: {data.income}</Typography>
@@ -217,11 +217,11 @@ const DashBoard: React.FC = () => {
             onChange={handleCategoryChange}
           >
             <MenuItem value="all">All</MenuItem>
-            {Array.isArray(categories)?categories.map(category => (
+            {Array.isArray(categories) ? categories.map(category => (
               <MenuItem key={category.id} value={category.id.toString()}>
                 {category.Name}
               </MenuItem>
-            )):""}
+            )) : ""}
           </Select>
         </FormControl>
       </Box>
@@ -231,7 +231,7 @@ const DashBoard: React.FC = () => {
         {chartType === 'line' && <Line data={chartData} />}
         {chartType === 'bar' && <Bar data={chartData} />}
       </Box>
-    </>
+    </Box>
   );
 };
 
