@@ -30,6 +30,7 @@ const lightTheme = createTheme({
                 },
             },
         },
+
     },
 });
 
@@ -37,8 +38,10 @@ const darkTheme = createTheme({
     palette: {
         mode: 'dark',
         background: {
-            default: '#282828',
-            paper: '#1d1d1d',
+            // default: '#282828',
+            // paper: '#1d1d1d',
+            default: 'black',
+            paper: 'black',
         },
         text: {
             primary: '#ffffff',
@@ -49,7 +52,7 @@ const darkTheme = createTheme({
         MuiCssBaseline: {
             styleOverrides: {
                 body: {
-                    backgroundColor: '#121212',
+                    // backgroundColor: '#121212',
                 },
             },
         },
@@ -60,7 +63,32 @@ const darkTheme = createTheme({
                 },
             },
         },
+        MuiPaper: {
+            styleOverrides: {
+                root: {
+                    boxShadow: `
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+    0 0 0 1px hsla(0, 0%, 0%, 0.05),
+    0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+    0 0.9px 1.5px hsla(0, 0%, 0%, 0.045),
+    0 3.5px 6px hsla(0, 0%, 0%, 0.09)`,
+                }
+            },
+        },
+        MuiCard: {
+            styleOverrides: {
+                root: {
+                    boxShadow: `
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+    0 0 0 1px hsla(0, 0%, 0%, 0.05),
+    0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+    0 0.9px 1.5px hsla(0, 0%, 0%, 0.045),
+    0 3.5px 6px hsla(0, 0%, 0%, 0.09)`,
+                }
+            }
+        },
+
     },
 });
- 
+
 export { lightTheme, darkTheme };

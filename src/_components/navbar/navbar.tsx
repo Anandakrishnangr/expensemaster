@@ -148,8 +148,8 @@ export default function LabTabs({ theme }: Labtbs) {
                     </Menu>
                 </Box>
                 {TabContent.map((tab, index) => (
-                    <TabPanel key={index} sx={{p:0,my:1}} value={tab.value}>
-                        <Card>
+                    <TabPanel key={index} sx={{ p: 0, my: 1 }} value={tab.value}>
+                        <Card sx={{ background: "transparent" }}>
                             <CardContent sx={{ m: 1, }}>
 
                                 {tab.label}

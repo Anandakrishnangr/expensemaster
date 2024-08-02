@@ -43,13 +43,13 @@ const DashboardHome: React.FC = () => {
                         height: '100%',
                     },
                     body: {
-                        backgroundColor: isDarkMode ? darkTheme.palette.background.default : lightTheme.palette.background.paper,
+                        // backgroundColor: isDarkMode ? darkTheme.palette.background.default : lightTheme.palette.background.paper,
                         margin: 0,
                         minHeight: '100vh',
                     },
                 }}
             />
-            <Paper>
+            <Paper sx={{ boxShadow: "none", background: "transparent" }}>
 
                 <Box
                     sx={{

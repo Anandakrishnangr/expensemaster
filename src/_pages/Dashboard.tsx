@@ -178,8 +178,15 @@ const DashBoard: React.FC = () => {
 
   return (
     <>
-      <Card>
-        <CardContent sx={{ m: 1, }}>
+      <Card sx={{
+        background: "transparent", boxShadow: `
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+    0 0 0 1px hsla(0, 0%, 0%, 0.05),
+    0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+    0 0.9px 1.5px hsla(0, 0%, 0%, 0.045),
+    0 3.5px 6px hsla(0, 0%, 0%, 0.09)`,
+      }}>
+        <CardContent sx={{ m: 1, boxShadow: "none" }}>
           <Box sx={{ m: 1, padding: 2 }}>
             <Typography variant="h6" sx={{ textAlign: 'center' }}>Account Summary</Typography>
             <Box>
@@ -187,7 +194,7 @@ const DashBoard: React.FC = () => {
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={4}>
                     <Card>
-                      <CardContent>
+                      <CardContent className='seperation'>
                         <Box display="flex" alignItems="center">
                           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                             <PaidIcon sx={{ fontSize: '45px' }} color="success" />
@@ -207,7 +214,7 @@ const DashBoard: React.FC = () => {
                   </Grid>
                   <Grid item xs={12} sm={4}>
                     <Card>
-                      <CardContent>
+                      <CardContent className='seperation'>
                         <Box display="flex" alignItems="center">
                           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                             <PaidIcon sx={{ fontSize: '45px' }} color="error" />
@@ -227,10 +234,10 @@ const DashBoard: React.FC = () => {
                   </Grid>
                   <Grid item xs={12} sm={4}>
                     <Card>
-                      <CardContent>
+                      <CardContent className='seperation'>
                         <Box display="flex" alignItems="center">
                           <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                            <AccountBalanceIcon sx={{ fontSize: '45px' }}  />
+                            <AccountBalanceIcon sx={{ fontSize: '45px' }} />
                           </Box>
                           <Box ml={1}>
                             <Typography variant="body1" sx={{ fontSize: '10px' }} >
@@ -246,7 +253,7 @@ const DashBoard: React.FC = () => {
                     </Card>
                   </Grid>
 
-                
+
                 </Grid>
               </Box>
             </Box>
