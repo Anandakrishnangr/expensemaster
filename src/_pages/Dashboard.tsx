@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '../_utils/axios';
-import { Box, Typography, MenuItem, FormControl, Select, InputLabel, TextField } from '@mui/material';
+import { Box, Typography, MenuItem, FormControl, Select, InputLabel, TextField, Card, CardContent, Grid } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Line, Bar } from 'react-chartjs-2';
 import { Chart, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -11,6 +11,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { DateRange } from '@mui/x-date-pickers-pro/models';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import PaidIcon from '@mui/icons-material/Paid';
 // Register Chart.js components
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 
@@ -176,61 +178,131 @@ const DashBoard: React.FC = () => {
 
   return (
     <>
-      <Box sx={{ m: 1, border: '1px solid black', padding: 2 }}>
-        <Typography variant="h6" sx={{ textAlign: 'center' }}>Account Summary</Typography>
-        <Typography>Income: {data.income}</Typography>
-        <Typography>Expense: {data.expense}</Typography>
-        <Typography>Balance: {data.balance}</Typography>
-      </Box>
+      <Card>
+        <CardContent sx={{ m: 1, }}>
+          <Box sx={{ m: 1, padding: 2 }}>
+            <Typography variant="h6" sx={{ textAlign: 'center' }}>Account Summary</Typography>
+            <Box>
+              <Box >
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={4}>
+                    <Card>
+                      <CardContent>
+                        <Box display="flex" alignItems="center">
+                          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <PaidIcon sx={{ fontSize: '45px' }} color="success" />
+                          </Box>
+                          <Box ml={1}>
+                            <Typography variant="body1" sx={{ fontSize: '10px' }} >
+                              Income
+                            </Typography>
+                            <Typography sx={{ fontSize: "20px" }}>
+                              ₹ {data.income}
+                            </Typography>
+                          </Box>
+                        </Box>
 
-      <Box sx={{ m: 1, border: '1px solid black', padding: 2 }}>
-        <Typography variant="h6" sx={{ textAlign: 'center' }}>Filters</Typography>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DateRangePicker
-            value={dateRange}
-            onChange={(newValue) => setDateRange(newValue)}
-          />
-        </LocalizationProvider>
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="chart-type-label">Chart Type</InputLabel>
-          <Select
-            labelId="chart-type-label"
-            id="chart-type-select"
-            value={chartType}
-            label="Chart Type"
-            onChange={handleChartTypeChange}
-          >
-            {chartOptions.map(option => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="category-label">Category</InputLabel>
-          <Select
-            labelId="category-label"
-            id="category-select"
-            value={selectedCategory}
-            label="Category"
-            onChange={handleCategoryChange}
-          >
-            <MenuItem value="all">All</MenuItem>
-            {Array.isArray(categories)?categories.map(category => (
-              <MenuItem key={category.id} value={category.id.toString()}>
-                {category.Name}
-              </MenuItem>
-            )):""}
-          </Select>
-        </FormControl>
-      </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Card>
+                      <CardContent>
+                        <Box display="flex" alignItems="center">
+                          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <PaidIcon sx={{ fontSize: '45px' }} color="error" />
+                          </Box>
+                          <Box ml={1}>
+                            <Typography variant="body1" sx={{ fontSize: '10px' }} >
+                              Expense
+                            </Typography>
+                            <Typography >
+                              ₹ {data.expense}
+                            </Typography>
+                          </Box>
+                        </Box>
 
-      <Box sx={{ m: 1, border: '1px solid black' }}>
-        <Typography variant="h6" sx={{ textAlign: 'center' }}>Income and Expense Over Time</Typography>
-        {chartType === 'line' && <Line data={chartData} />}
-        {chartType === 'bar' && <Bar data={chartData} />}
-      </Box>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                  <Grid item xs={12} sm={4}>
+                    <Card>
+                      <CardContent>
+                        <Box display="flex" alignItems="center">
+                          <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                            <AccountBalanceIcon sx={{ fontSize: '45px' }}  />
+                          </Box>
+                          <Box ml={1}>
+                            <Typography variant="body1" sx={{ fontSize: '10px' }} >
+                              Balance
+                            </Typography>
+                            <Typography sx={{ fontSize: "20px", color: data.balance >= 0 ? 'red' : 'green' }}>
+                              ₹ {data.balance}
+                            </Typography>
+                          </Box>
+                        </Box>
+
+                      </CardContent>
+                    </Card>
+                  </Grid>
+
+                
+                </Grid>
+              </Box>
+            </Box>
+          </Box>
+
+          <Typography variant="h6" sx={{ textAlign: 'center' }}>Income and Expense Over Time</Typography>
+          <Card>
+            <CardContent sx={{ m: 1, padding: 2 }}>
+              <Box sx={{ display: "flex" }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DateRangePicker
+                    value={dateRange}
+                    onChange={(newValue) => setDateRange(newValue)}
+                  />
+                </LocalizationProvider>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id="chart-type-label">Chart Type</InputLabel>
+                  <Select
+                    labelId="chart-type-label"
+                    id="chart-type-select"
+                    value={chartType}
+                    label="Chart Type"
+                    onChange={handleChartTypeChange}
+                  >
+                    {chartOptions.map(option => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id="category-label">Category</InputLabel>
+                  <Select
+                    labelId="category-label"
+                    id="category-select"
+                    value={selectedCategory}
+                    label="Category"
+                    onChange={handleCategoryChange}
+                  >
+                    <MenuItem value="all">All</MenuItem>
+                    {Array.isArray(categories) ? categories.map(category => (
+                      <MenuItem key={category.id} value={category.id.toString()}>
+                        {category.Name}
+                      </MenuItem>
+                    )) : ""}
+                  </Select>
+                </FormControl>
+              </Box>
+            </CardContent>
+          </Card>
+
+          {chartType === 'line' && <Line data={chartData} />}
+          {chartType === 'bar' && <Bar data={chartData} />}
+        </CardContent>
+      </Card>
     </>
   );
 };

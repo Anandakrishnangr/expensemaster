@@ -11,7 +11,7 @@ const logout = () => {
 };
 
 const axiosInstance = axios.create({
-  baseURL: 'http://192.168.29.7:8000/', // Replace with your backend URL
+  baseURL: 'http://192.168.1.75:8000/', // Replace with your backend URL
 });
 
 axiosInstance.interceptors.request.use(

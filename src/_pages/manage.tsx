@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../_utils/axios';
-import { Box, Button, Grid, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Box, Button, Grid, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Card, CardContent } from '@mui/material';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import CallReceivedIcon from '@mui/icons-material/CallReceived';
 import AddIcon from '@mui/icons-material/Add';
@@ -84,21 +84,23 @@ const Manage: React.FC = () => {
                 <Box sx={{ p: 2 }}>
                     <Grid container sx={{ m: 0, width: '100%' }}>
                         {categories?.map((category) => (
-                            <Grid item xs={12} sm={6} md={4} lg={3} key={category.id} sx={{}}>
-                                <Box sx={{ margin: '2px', border: '1px solid black' }}>
-                                    <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
-                                        <Button onClick={() => handleEdit(category.id, category)}>
-                                            <CreateIcon />
+                            <Grid item xs={12} sm={6} md={4} lg={3} key={category.id} sx={{margin:0}}>
+                                <Card>
+                                    <CardContent sx={{p:0,pb:0}}>
+                                        <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
+                                            <Button onClick={() => handleEdit(category.id, category)}>
+                                                <CreateIcon />
+                                            </Button>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 2 ,fontWeight:"900",fontSize:"px"}}>
+                                            {category.Name}
+                                        </Box>
+                                        <Typography>{category.Description}</Typography>
+                                        <Button fullWidth onClick={() => handleOpenDialog(category.id)}>
+                                            <DeleteIcon /> Delete
                                         </Button>
-                                    </Box>
-                                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 2 }}>
-                                        {category.Name}
-                                    </Box>
-                                    <Typography>{category.Description}</Typography>
-                                    <Button fullWidth onClick={() => handleOpenDialog(category.id)}>
-                                        <DeleteIcon /> Delete
-                                    </Button>
-                                </Box>
+                                    </CardContent>
+                                </Card>
                             </Grid>
                         ))}
                     </Grid>

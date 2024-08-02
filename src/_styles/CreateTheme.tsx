@@ -1,4 +1,7 @@
 import { createTheme } from '@mui/material/styles';
+import { CssBaseline, GlobalStyles, ThemeProvider } from '@mui/material';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const lightTheme = createTheme({
     palette: {
@@ -13,6 +16,13 @@ const lightTheme = createTheme({
         },
     },
     components: {
+        MuiCssBaseline: {
+            styleOverrides: {
+                body: {
+                    backgroundColor: '#ffffff',
+                },
+            },
+        },
         MuiInputLabel: {
             styleOverrides: {
                 asterisk: {
@@ -27,7 +37,7 @@ const darkTheme = createTheme({
     palette: {
         mode: 'dark',
         background: {
-            default: '#121212',
+            default: '#282828',
             paper: '#1d1d1d',
         },
         text: {
@@ -36,6 +46,13 @@ const darkTheme = createTheme({
         },
     },
     components: {
+        MuiCssBaseline: {
+            styleOverrides: {
+                body: {
+                    backgroundColor: '#121212',
+                },
+            },
+        },
         MuiInputLabel: {
             styleOverrides: {
                 asterisk: {
@@ -45,5 +62,5 @@ const darkTheme = createTheme({
         },
     },
 });
-
+ 
 export { lightTheme, darkTheme };

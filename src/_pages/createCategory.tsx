@@ -75,41 +75,51 @@ const CreateCategory: React.FC = () => {
   }, [datas])
   return (
     <Modal open={open.open} onClose={handleClose}>
-      <Container maxWidth="sm">
-        <Paper elevation={1} component="form" onSubmit={handleAddCategory} sx={{ mt: 3, p: 2 }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Typography variant="h4" gutterBottom>
-              {open.id == null ? "Add Category" : "Update Category"}
-            </Typography>
-            <Button onClick={handleClose}><Close sx={{ color: "red", p: 0 }} /></Button>
-          </Box>
-          <TextField
-            size='small'
-            label="Description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            size='small'
-            label="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            fullWidth
-            margin="normal"
-          />
-          {mutation.status === 'pending' ? (
-            <CircularProgress />
-          ) : (
-            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-              {open.id == null ? "Add Category" : "Update Category"}
-            </Button>
-          )}
-        </Paper>
-      </Container>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        }}
+      >
+        <Container maxWidth="sm">
+          <Paper elevation={1} component="form" onSubmit={handleAddCategory} sx={{ mt: 3, p: 2 }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography variant="h5" gutterBottom>
+                {open.id == null ? "ADD CATEGORY" : "UPDATE CATEGORY"}
+              </Typography>
+              <Button onClick={handleClose}><Close sx={{ color: "red", p: 0 }} /></Button>
+            </Box>
+            <TextField
+              size='small'
+              label="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              fullWidth
+              margin="normal"
+            />
+            <TextField
+              size='small'
+              label="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              fullWidth
+              margin="normal"
+            />
+
+            {mutation.status === 'pending' ? (
+              <CircularProgress />
+            ) : (
+              <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+                {open.id == null ? "Add Category" : "Update Category"}
+              </Button>
+            )}
+          </Paper>
+        </Container>
+      </Box>
     </Modal>
   );
 };

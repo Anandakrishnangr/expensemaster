@@ -5,7 +5,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import MapComponent from '../map/mapComponent';
-import { Avatar, Button, Menu, MenuItem, Switch, Tab, Typography, styled } from '@mui/material';
+import { Avatar, Button, Card, CardContent, Menu, MenuItem, Switch, Tab, Typography, styled } from '@mui/material';
 import { Logout, Password } from '@mui/icons-material';
 import axiosInstance from '../../_utils/axios';
 import { persistor } from '../../redux/store';
@@ -148,7 +148,15 @@ export default function LabTabs({ theme }: Labtbs) {
                     </Menu>
                 </Box>
                 {TabContent.map((tab, index) => (
-                    <TabPanel key={index} value={tab.value}>{tab.label}</TabPanel>
+                    <TabPanel key={index} sx={{p:0,my:1}} value={tab.value}>
+                        <Card>
+                            <CardContent sx={{ m: 1, }}>
+
+                                {tab.label}
+
+                            </CardContent>
+                        </Card>
+                    </TabPanel>
                 ))}
             </TabContext>
         </Box>

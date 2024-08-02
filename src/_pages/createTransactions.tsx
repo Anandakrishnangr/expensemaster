@@ -22,7 +22,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { openCreateTransactinModal } from '../redux/modalSlice';
 import { showErrorSnackbar, showSuccessSnackbar } from '../_components/snackbar/Snackbar';
-
+import moment from 'moment'
+import { DatePicker } from '@mui/x-date-pickers';
 interface Category {
     id: number;
     Name: string;
@@ -51,7 +52,8 @@ const CreateTransaction: React.FC = () => {
     const [description, setDescription] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
     const [categoryID, setCategoryID] = useState<any>(null);
-    const [transactionDate, setTransactionDate] = useState<string>('');
+    const [transactionDate, setTransactionDate] = useState<string>(moment(new Date()).format('DD/MM/YYYY'));
+    console.log(transactionDate)
     const [transactionType, setTransactionType] = useState<string>('Income');
     let Dispatch = useDispatch()
     const queryClient = useQueryClient();
@@ -72,7 +74,7 @@ const CreateTransaction: React.FC = () => {
     const mutation = useMutation<void, unknown, TransactionData>({
         mutationFn: open.id == null ? createTransaction : updateTransaction,
         onSuccess: () => {
-            showSuccessSnackbar('Transaction created successfully!');
+            showSuccessSnackbar(open.id == null ? 'Transaction created successfully !' : "Transaction updated successfully !");
             queryClient.invalidateQueries({ queryKey: ['transactions'] });
             handleClose()
         },
@@ -114,78 +116,89 @@ const CreateTransaction: React.FC = () => {
 
     return (
         <Modal open={open.open} onClose={handleClose}>
-            <Container maxWidth="sm">
-                <Paper elevation={1} component="form" onSubmit={handleSubmit} sx={{ mt: 3, p: 2 }}>
-                    <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                        <Typography variant="h4" gutterBottom>
-                            {open.id == null ? "Create Transaction" : "Update Transaction"}
-                        </Typography>
-                        <Button onClick={handleClose}><Close sx={{ color: "red", p: 0 }} /></Button>
-                    </Box>
-                    <TextInput
-                        size='small'
-                        label="Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        required
-                        fullWidth
-                        margin="normal"
-                    />
-                    <TextInput
-                        size='small'
-                        label="Amount"
-                        type="number"
-                        value={amount}
-                        onChange={(e) => setAmount(Number(e.target.value))}
-                        required
-                        fullWidth
-                        margin="normal"
-                    />
-                    <FormControl fullWidth margin="normal">
-                        <CustomAutocomplete
-                            onChange={(value) => { setCategoryID(value) }}
-                            options={categories}
-                            label='sd'
-                            descriptionLength={20}
-                            value={categoryID}
-
+            <Box
+                sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                }}
+            >
+                <Container maxWidth="sm">
+                    <Paper elevation={1} component="form" onSubmit={handleSubmit} sx={{ mt: 3, p: 2 }}>
+                        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                            <Typography variant="h5" gutterBottom>
+                                {open.id == null ? "Create Transaction" : "Update Transaction"}
+                            </Typography>
+                            <Button onClick={handleClose}><Close sx={{ color: "red", p: 0 }} /></Button>
+                        </Box>
+                        <TextInput
+                            size='small'
+                            label="Amount"
+                            type="number"
+                            value={amount}
+                            onChange={(e) => setAmount(Number(e.target.value))}
+                            required
+                            fullWidth
+                            margin="normal"
+                        />
+                        <TextInput
+                            size='small'
+                            label="Description"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                            fullWidth
+                            margin="normal"
                         />
 
-                    </FormControl>
-                    <TextField
-                        size='small'
-                        label="Transaction Date"
-                        type="date"
-                        value={transactionDate}
-                        onChange={(e) => {
-                            console.log(e.target.value)
-                            setTransactionDate(e.target.value)
-                        }}
-                        required
-                        fullWidth
-                        margin="normal"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                    />
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel>Transaction Type</InputLabel>
-                        <Select
-                            label="Transaction Type"
+                        <FormControl fullWidth margin="normal">
+                            <CustomAutocomplete
+                                onChange={(value) => { setCategoryID(value) }}
+                                options={categories}
+                                label='Category'
+                                descriptionLength={20}
+                                value={categoryID}
+
+                            />
+
+                        </FormControl>
+                        <TextField
                             size='small'
-                            value={transactionType}
-                            onChange={(e) => setTransactionType(e.target.value)}
+                            label="Transaction Date"
+                            type="date"
+                            value={transactionDate}
+                            onChange={(e) => {
+                                console.log(e.target.value)
+                                setTransactionDate(e.target.value)
+                            }}
                             required
-                        >
-                            <MenuItem value="Income">Income</MenuItem>
-                            <MenuItem value="Expense">Expense</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-                        {open.id == null ? "Create Transaction" : "Update Transaction"}
-                    </Button>
-                </Paper>
-            </Container>
+                            fullWidth
+                            margin="normal"
+                            placeholder="dd/mm/yyyy"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                        <FormControl fullWidth margin="normal">
+                            <InputLabel>Transaction Type</InputLabel>
+                            <Select
+                                label="Transaction Type"
+                                size='small'
+                                value={transactionType}
+                                onChange={(e) => setTransactionType(e.target.value)}
+                                required
+                            >
+                                <MenuItem value="Income">Income</MenuItem>
+                                <MenuItem value="Expense">Expense</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+                            {open.id == null ? "Create Transaction" : "Update Transaction"}
+                        </Button>
+                    </Paper>
+                </Container>
+            </Box>
         </Modal>
     );
 };

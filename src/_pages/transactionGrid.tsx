@@ -27,7 +27,13 @@ import { openCreateTransactinModal } from '../redux/modalSlice';
 export interface Transaction {
     id: number;
     Amount: number;
-    CategoryID: number;
+    CategoryID: {
+        id: number;
+        Name: string;
+        Description: string;
+        TransactionDate: string;
+        UserID: number;
+    };
     Description: string;
     TransactionDate: string;
     TransactionType: string;
@@ -36,7 +42,12 @@ export interface Transaction {
 
 const fetchTransactions = async (): Promise<Transaction[]> => {
     const response = await axiosInstance.get('api/transactions/');
-    return response.data;
+    // Transform the data to include CategoryName
+    const transactions = response.data.map((transaction: Transaction) => ({
+        ...transaction,
+        CategoryName: transaction.CategoryID.Name
+    }));
+    return transactions;
 };
 
 const deleteTransaction = async (id: number): Promise<void> => {
@@ -78,6 +89,7 @@ const TransactionDataGrid: React.FC = () => {
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchText(event.target.value);
     };
+
     function formatDate(dateString: string): string {
         const date = new Date(dateString);
         const year = date.getUTCFullYear();
@@ -86,10 +98,11 @@ const TransactionDataGrid: React.FC = () => {
 
         return `${year}-${month}-${day}`;
     }
+
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'Amount', headerName: 'Amount', width: 130 },
-        { field: 'CategoryID', headerName: 'Category ID', width: 130 },
+        { field: 'CategoryName', headerName: 'Category Name', width: 130 }, // Updated field
         { field: 'Description', headerName: 'Description', width: 200 },
         {
             field: 'TransactionDate', headerName: 'Transaction Date', width: 180,
@@ -104,8 +117,8 @@ const TransactionDataGrid: React.FC = () => {
             width: 150,
             renderCell: (params: any) => (
                 <Button variant="contained" color="secondary" onClick={(e) => {
-                    e.stopPropagation()
-                    handleDeleteClick(params.row.id)
+                    e.stopPropagation();
+                    handleDeleteClick(params.row.id);
                 }}>
                     Delete
                 </Button>
@@ -116,10 +129,12 @@ const TransactionDataGrid: React.FC = () => {
     const filteredTransactions = transactions.filter((transaction: Transaction) =>
         transaction.Description.toLowerCase().includes(searchText.toLowerCase())
     );
-    let Dispatch = useDispatch()
+
+    let Dispatch = useDispatch();
     const handleCreateTransaction = () => {
-        Dispatch(openCreateTransactinModal({ open: true, id: null, data: null }))
-    }
+        Dispatch(openCreateTransactinModal({ open: true, id: null, data: null }));
+    };
+
     return (
         <Container maxWidth="lg">
             <Box>
@@ -152,8 +167,8 @@ const TransactionDataGrid: React.FC = () => {
                                 },
                             }}
                             onRowClick={(e) => {
-                                let id = e.id ? Number(e.id) : null
-                                Dispatch(openCreateTransactinModal({ open: true, id, data: e.row }))
+                                let id = e.id ? Number(e.id) : null;
+                                Dispatch(openCreateTransactinModal({ open: true, id, data: e.row }));
                             }}
                             pageSizeOptions={[10, 20, 50]}
                             checkboxSelection
@@ -186,7 +201,6 @@ const TransactionDataGrid: React.FC = () => {
         </Container>
     );
 };
-
 const CustomToolbar: React.FC = () => {
     return (
         <GridToolbarContainer>
