@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-// import { useQuery } from 'react-query';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, Button, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import { useDispatch } from 'react-redux';
+import { openCreateCategory } from '../../../redux/modalSlice';
 
 // Define the interface for your data
 interface Category {
@@ -15,7 +17,7 @@ interface CustomAutocompleteProps {
   options: Category[];
   label: string;
   descriptionLength: number;
-  onChange: (value: any | null) => void;
+  onChange: (value: Category | null) => void;
   value: Category | null;
 }
 
@@ -29,9 +31,11 @@ export const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
   label,
   descriptionLength,
   onChange,
-  value
+  value,
 }) => {
-  console.log({ value, options });
+
+  let dispatch = useDispatch()
+  let addcategory = () => dispatch(openCreateCategory({ open: true, id: null, data: null }))
   return (
     <Autocomplete
       size='small'
@@ -49,8 +53,15 @@ export const CustomAutocomplete: React.FC<CustomAutocompleteProps> = ({
       onChange={(event, newValue) => {
         onChange(newValue ? newValue : null);
       }}
-      renderInput={(params) => <TextField {...params} label={label} />}
-      value={value}
-    />
+      renderInput={(params) => (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <TextField {...params} label={label} fullWidth />
+          <IconButton onClick={addcategory} sx={{ marginLeft: 1 }}>
+          <AddIcon />
+        </IconButton>
+        </Box >
+      )}
+value = { value }
+  />
   );
 };

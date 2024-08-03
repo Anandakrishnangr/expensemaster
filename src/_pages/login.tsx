@@ -43,18 +43,26 @@ const Login: React.FC = () => {
             // alert('Login successful!');
         },
         onError: (error: any) => {
+            console.log(error)
             showWarningSnackbar(`Login failed: ${error.response?.data?.message || error.message}`);
         }
     });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (!username.length) {
+            return showWarningSnackbar("Enter username !")
+        }
+        if (!password.length) {
+            return showWarningSnackbar("Enter password")
+        }
+        console.log('sdfsdf')
         mutation.mutate({ username, password });
     };
 
     return (
         <Container sx={{ boxShadow: "none" }} component="main" maxWidth="xs">
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3, p: 3 }}>
+            <Box sx={{ mt: 3, p: 3 }}>
                 <Typography variant="h4" gutterBottom>
                     Login
                 </Typography>
@@ -87,7 +95,7 @@ const Login: React.FC = () => {
                         },
                     }}
                 />
-                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+                <Button onClick={handleSubmit} variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
                     Login
                 </Button>
             </Box>

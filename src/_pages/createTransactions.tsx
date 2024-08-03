@@ -21,7 +21,7 @@ import { Close } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { openCreateTransactinModal } from '../redux/modalSlice';
-import { showErrorSnackbar, showSuccessSnackbar } from '../_components/snackbar/Snackbar';
+import { showErrorSnackbar, showSuccessSnackbar, showWarningSnackbar } from '../_components/snackbar/Snackbar';
 import moment from 'moment'
 import { DatePicker } from '@mui/x-date-pickers';
 import { format } from 'path';
@@ -93,6 +93,21 @@ const CreateTransaction: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        if (!amount) {
+            return showWarningSnackbar("Enter an amount !")
+        }
+        if (!description) {
+            return showWarningSnackbar("Enter a description")
+        }
+        if (!categoryID) {
+            return showWarningSnackbar("Select a category")
+        }
+        if(!transactionDate){
+            return showWarningSnackbar("Select a Transaction Date")
+        }
+        if(!transactionType){
+            return showWarningSnackbar("Select a Transaction type")
+        }
         mutation.mutate({ Description: description, Amount: amount, CategoryID: categoryID?.id ?? categoryID, TransactionDate: transactionDate, TransactionType: transactionType, id: open?.id });
     };
     function formatDate(dateString: string): string {
@@ -133,7 +148,7 @@ const CreateTransaction: React.FC = () => {
                 }}
             >
                 <Container maxWidth="sm">
-                    <Paper elevation={1} component="form" onSubmit={handleSubmit} sx={{ mt: 3, p: 2 }}>
+                    <Paper elevation={1}  sx={{ mt: 3, p: 2 }}>
                         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                             <Typography variant="h5" gutterBottom>
                                 {open.id == null ? "Create Transaction" : "Update Transaction"}
@@ -201,7 +216,7 @@ const CreateTransaction: React.FC = () => {
                                 <MenuItem value="Expense">Expense</MenuItem>
                             </Select>
                         </FormControl>
-                        <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+                        <Button type="button" onClick={handleSubmit} variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
                             {open.id == null ? "Create Transaction" : "Update Transaction"}
                         </Button>
                     </Paper>

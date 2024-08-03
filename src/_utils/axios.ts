@@ -5,7 +5,7 @@ import { persistor } from '../redux/store';
 const logout = () => {
   // Clear token and perform any additional cleanup
   localStorage.removeItem('token');
-  persistor.purge(); //
+  persistor.purge(); // Clear Redux persisted state
   // Redirect to the login page or any other appropriate action
   window.location.href = '/login'; // Adjust the redirect path as needed
 };
@@ -33,8 +33,11 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      // Handle 401 Unauthorized errors
-      logout();
+      const requestUrl = error.config.url;
+      if (requestUrl !== '/api/register/' && requestUrl !== '/api/login/') {
+        // Handle 401 Unauthorized errors
+        logout();
+      }
     }
     return Promise.reject(error);
   }

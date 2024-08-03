@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Button, Container, Grid, Paper, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, Paper, TextField, Typography } from '@mui/material';
 import { loginWithRegister } from '../redux/authSlice';
 import { useDispatch } from 'react-redux';
 import { showSuccessSnackbar, showWarningSnackbar } from '../_components/snackbar/Snackbar';
 import axiosInstance from '../_utils/axios';
+import { useNavigate } from 'react-router-dom';
 
 
 interface User {
@@ -31,7 +32,7 @@ const Register: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [user, setUser] = useState<string>('');
-
+  let navigate = useNavigate()
   let dispatch = useDispatch()
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
@@ -39,7 +40,6 @@ const Register: React.FC = () => {
     mutationFn: registerUser,
     onSuccess: (data) => {
       // Store the returned token in local storage
-      debugger
       dispatch(loginWithRegister({
         username: data.user.username,
         email: data.user.email,
@@ -48,6 +48,7 @@ const Register: React.FC = () => {
       }))
       localStorage.setItem('token', data.token);
       showSuccessSnackbar('Registration successful!');
+      navigate('/')
     },
     onError: (error: any) => {
       showWarningSnackbar(`Registration failed: ${error.response?.data?.message || error.message}`);
@@ -56,7 +57,23 @@ const Register: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+    if (!user.length) {
+      return showWarningSnackbar("Enter a username")
+    }
+    if (!email.length) {
+      return showWarningSnackbar("Enter email !")
+    }
+    if (!regex.test(email)) {
+      return showWarningSnackbar("Enter a valid email")
+    }
+    if (!password.length) {
+      return showWarningSnackbar("Enter a password !")
+    }
+    if (password.length < 8) {
+      return showWarningSnackbar("Password must have 8 characters long !")
+    }
     if (password !== confirmPassword) {
       alert('Passwords do not match');
       return;
@@ -71,7 +88,7 @@ const Register: React.FC = () => {
         <Typography component="h1" variant="h5" align="center" gutterBottom>
           Register
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <Box >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -141,12 +158,12 @@ const Register: React.FC = () => {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button type="submit" fullWidth variant="contained" color="primary">
+              <Button type="button" onClick={handleSubmit} fullWidth variant="contained" color="primary">
                 Register
               </Button>
             </Grid>
           </Grid>
-        </form>
+        </Box>
       </Paper>
     </Container>
   );

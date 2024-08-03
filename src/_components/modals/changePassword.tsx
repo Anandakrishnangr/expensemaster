@@ -26,6 +26,14 @@ export const ChangePasswordModal: React.FC = () => {
     let open = useSelector((state: RootState) => state.modal.changePassword)
     const handleClose = () => Dispatch(openChangePassword({ open: false }))
     const handleChangePassword = async () => {
+        if (!currentPassword.length) {
+            setError('Enter the current password ');
+            return;
+        }
+        if (newPassword.length < 8) {
+            setError('Enter a new password with 8 character long');
+            return;
+        }
         if (newPassword !== confirmPassword) {
             setError('New password and confirm password do not match.');
             return;
@@ -42,8 +50,17 @@ export const ChangePasswordModal: React.FC = () => {
                 handleClose();
             }
         } catch (error) {
-            console.error('Error changing password:', error);
-            showWarningSnackbar('Error changing password. Please try again.');
+
+            if (axios.isAxiosError(error)) {
+                const errorResponse = error.response as { data: { old_password?: string[] } };
+
+                const errorMessage = errorResponse.data.old_password
+                    ? errorResponse.data.old_password.join(', ')
+                    : 'Error changing password. Please try again.';
+                showWarningSnackbar(`Error: ${errorMessage}`);
+            } else {
+                showWarningSnackbar('An unexpected error occurred.');
+            }
         }
     };
 
@@ -60,7 +77,6 @@ export const ChangePasswordModal: React.FC = () => {
                 <DialogContentText>
                     Please enter your current password, new password, and confirm the new password.
                 </DialogContentText>
-                {error && <Box sx={{ color: 'red', mb: 2 }}>{error}</Box>}
                 <TextField
                     autoFocus
                     margin="dense"
@@ -89,6 +105,8 @@ export const ChangePasswordModal: React.FC = () => {
                     value={confirmPassword}
                     onChange={handleInputChange(setConfirmPassword)}
                 />
+                {error && <Box sx={{ color: 'red', mb: 2 }}>{error}</Box>}
+
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleClose}>Cancel</Button>
