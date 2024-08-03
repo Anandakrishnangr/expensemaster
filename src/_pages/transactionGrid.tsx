@@ -136,11 +136,18 @@ const TransactionDataGrid: React.FC = () => {
     };
 
     return (
-        <Container maxWidth="lg">
+        <Container sx={{
+            background: "transparent", boxShadow: `
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+    0 0 0 1px hsla(0, 0%, 0%, 0.05),
+    0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+    0 0.9px 1.5px hsla(0, 0%, 0%, 0.045),
+    0 3.5px 6px hsla(0, 0%, 0%, 0.09)`,
+        }} maxWidth="lg">
             <Box>
-                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "5px",p:1 }}>
-                    <Box sx={{display:"flex",alignItems:"center"}}>
-                        <ReceiptIcon color='success' sx={{marginRight:'10px'}} /> All Transactions
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "5px", p: 1 }}>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <ReceiptIcon color='success' sx={{ marginRight: '10px' }} /> All Transactions
                     </Box>
                     <Button sx={{ whiteSpace: "nowrap", pl: 3, pr: 3, fontSize: "12px" }} variant='contained' onClick={handleCreateTransaction}>Create Trasaction</Button>
                     {/* <TextField
@@ -153,32 +160,34 @@ const TransactionDataGrid: React.FC = () => {
                         onChange={handleSearch}
                     /> */}
                 </Box>
-                {isLoading ? (
+                {/* {isLoading ? (
                     <CircularProgress />
                 ) : error ? (
                     <div>Error loading transactions</div>
-                ) : (
-                    <Box sx={{ height: 600, width: '100%' }}>
-                        <DataGrid
-                            rows={filteredTransactions}
-                            columns={columns}
-                            initialState={{
-                                pagination: {
-                                    paginationModel: {
-                                        pageSize: 10,
-                                    },
+                ) : ( */}
+                <Box sx={{
+                    height: 600, width: '100%'
+                }}>
+                    <DataGrid
+                        rows={filteredTransactions}
+                        columns={columns}
+                        initialState={{
+                            pagination: {
+                                paginationModel: {
+                                    pageSize: 10,
                                 },
-                            }}
-                            onRowClick={(e) => {
-                                let id = e.id ? Number(e.id) : null;
-                                Dispatch(openCreateTransactinModal({ open: true, id, data: e.row }));
-                            }}
-                            pageSizeOptions={[10, 20, 50]}
-                            checkboxSelection
-                            disableRowSelectionOnClick
-                        />
-                    </Box>
-                )}
+                            },
+                        }}
+                        onRowClick={(e) => {
+                            let id = e.id ? Number(e.id) : null;
+                            Dispatch(openCreateTransactinModal({ open: true, id, data: e.row }));
+                        }}
+                        pageSizeOptions={[10, 20, 50]}
+                        checkboxSelection
+                        disableRowSelectionOnClick
+                    />
+                </Box>
+                {/* )} */}
                 <Dialog
                     open={deleteId !== null}
                     onClose={handleCancelDelete}
