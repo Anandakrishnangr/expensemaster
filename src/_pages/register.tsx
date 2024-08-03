@@ -51,7 +51,16 @@ const Register: React.FC = () => {
       navigate('/')
     },
     onError: (error: any) => {
-      showWarningSnackbar(`Registration failed: ${error.response?.data?.message || error.message}`);
+
+      const errorResponse = error.response as { data: { [key: string]: string[] } };
+
+      if (errorResponse) {
+        const firstErrorKey = Object.keys(errorResponse.data)[0];
+        const errorMessage = errorResponse.data[firstErrorKey]?.[0] || 'Error changing password. Please try again.';
+        showWarningSnackbar(`Error: ${errorMessage}`);
+      } else {
+        showWarningSnackbar('Error changing password. Please try again.');
+      }
     }
   });
 
@@ -75,7 +84,7 @@ const Register: React.FC = () => {
       return showWarningSnackbar("Password must have 8 characters long !")
     }
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      showWarningSnackbar('Passwords do not match');
       return;
     }
 
