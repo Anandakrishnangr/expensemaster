@@ -53,18 +53,12 @@ const CreateTransaction: React.FC = () => {
     const [description, setDescription] = useState<string>('');
     const [amount, setAmount] = useState<number>(0);
     const [categoryID, setCategoryID] = useState<any>(null);
-    const [transactionDate, setTransactionDate] = useState<string>("");
+    const [transactionDate, setTransactionDate] = useState<string>(moment(new Date()).toISOString().split('T')[0]);
     console.log(transactionDate)
     const [transactionType, setTransactionType] = useState<string>('Income');
     let Dispatch = useDispatch()
     const queryClient = useQueryClient();
-    useEffect(() => {
-        if (transactionDate == "") {
-            const now = new Date();
-            const formattedDate = now.toISOString().split('T')[0];
-            setTransactionDate(formattedDate);
-        }
-    }, []);
+
     const handleClose = () => {
         Dispatch(openCreateTransactinModal({ open: false, id: null, data: null }))
         setDescription('')
