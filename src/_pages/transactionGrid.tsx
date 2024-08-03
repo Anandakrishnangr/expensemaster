@@ -160,34 +160,34 @@ const TransactionDataGrid: React.FC = () => {
                         onChange={handleSearch}
                     /> */}
                 </Box>
-                {/* {isLoading ? (
+                {isLoading ? (
                     <CircularProgress />
                 ) : error ? (
                     <div>Error loading transactions</div>
-                ) : ( */}
-                <Box sx={{
-                    height: 600, width: '100%'
-                }}>
-                    <DataGrid
-                        rows={filteredTransactions}
-                        columns={columns}
-                        initialState={{
-                            pagination: {
-                                paginationModel: {
-                                    pageSize: 10,
+                ) : (
+                    <Box sx={{
+                        height: 600, width: '100%'
+                    }}>
+                        <DataGrid
+                            rows={filteredTransactions}
+                            columns={columns}
+                            initialState={{
+                                pagination: {
+                                    paginationModel: {
+                                        pageSize: 10,
+                                    },
                                 },
-                            },
-                        }}
-                        onRowClick={(e) => {
-                            let id = e.id ? Number(e.id) : null;
-                            Dispatch(openCreateTransactinModal({ open: true, id, data: e.row }));
-                        }}
-                        pageSizeOptions={[10, 20, 50]}
-                        checkboxSelection
-                        disableRowSelectionOnClick
-                    />
-                </Box>
-                {/* )} */}
+                            }}
+                            onRowClick={(e) => {
+                                let id = e.id ? Number(e.id) : null;
+                                Dispatch(openCreateTransactinModal({ open: true, id, data: e.row }));
+                            }}
+                            pageSizeOptions={[10, 20, 50]}
+                            checkboxSelection
+                            disableRowSelectionOnClick
+                        />
+                    </Box>
+                )}
                 <Dialog
                     open={deleteId !== null}
                     onClose={handleCancelDelete}
