@@ -11,7 +11,8 @@ import axiosInstance from '../../_utils/axios';
 import { persistor } from '../../redux/store';
 import { showSuccessSnackbar } from '../snackbar/Snackbar';
 import { useDispatch } from 'react-redux';
-import { openChangePassword } from '../../redux/modalSlice';
+import { openChangePassword, openCreateTransactinModal } from '../../redux/modalSlice';
+import CreateTransaction from '../../_pages/createTransactions';
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 58,
@@ -114,6 +115,9 @@ export default function LabTabs({ theme }: Labtbs) {
         dispatch(openChangePassword({ open: true }))
         handleClose();
     };
+    const handleCreateTransaction = () => {
+        dispatch(openCreateTransactinModal({ open: true, id: null, data: null }));
+    };
     return (
         <Box sx={{ width: '100%', typography: 'body1' }}>
             <TabContext value={value}>
@@ -150,9 +154,12 @@ export default function LabTabs({ theme }: Labtbs) {
                 {TabContent.map((tab, index) => (
                     <TabPanel key={index} sx={{ p: 0, my: 1 }} value={tab.value}>
                         <Card sx={{ background: "transparent" }}>
-                            <CardContent sx={{ m: 1, }}>
+                            <CardContent sx={{ m: 1, display:"flex",justifyContent:"space-between"}}>
 
                                 {tab.label}
+
+                                {tab.label === 'DashBoard' && <Button sx={{ whiteSpace: "nowrap", pl: 3, pr: 3, fontSize: "12px" }} variant='contained' onClick={handleCreateTransaction}>Create Trasaction</Button>
+                                }
 
                             </CardContent>
                         </Card>

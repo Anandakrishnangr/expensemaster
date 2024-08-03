@@ -13,9 +13,12 @@ import { DateRange } from '@mui/x-date-pickers-pro/models';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PaidIcon from '@mui/icons-material/Paid';
+import HorizontalBarChart from '../_components/graphs/horizontalBar';
+import { Transaction } from './transactionGrid';
 // Register Chart.js components
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
-
+export const MoneyFormat = (number: string) =>
+  new Intl.NumberFormat("en-IN").format(parseFloat(number?.toString()));
 interface Category {
   id: number;
   Name: string;
@@ -24,15 +27,7 @@ interface Category {
   TransactionDate: string;
 }
 
-interface Transaction {
-  Amount: number;
-  CategoryID: number;
-  Description: string;
-  TransactionDate: string;
-  TransactionType: string;
-  UserID: number;
-  id: number;
-}
+
 
 const fetchTransactions = async (): Promise<Transaction[]> => {
   const response = await axiosInstance.get('api/transactions/');
@@ -94,7 +89,7 @@ const DashBoard: React.FC = () => {
     if (transactions) {
       let filteredTransactions = filterTransactions(transactions);
       if (selectedCategory !== 'all') {
-        filteredTransactions = filteredTransactions.filter(transaction => transaction.CategoryID === parseInt(selectedCategory));
+        filteredTransactions = filteredTransactions.filter(transaction => transaction.CategoryID.id === parseInt(selectedCategory));
       }
 
       let totalIncome = 0;
@@ -204,7 +199,7 @@ const DashBoard: React.FC = () => {
                               Income
                             </Typography>
                             <Typography sx={{ fontSize: "20px" }}>
-                              ₹ {data.income}
+                              ₹ {MoneyFormat(data.income?.toString())}
                             </Typography>
                           </Box>
                         </Box>
@@ -224,7 +219,7 @@ const DashBoard: React.FC = () => {
                               Expense
                             </Typography>
                             <Typography >
-                              ₹ {data.expense}
+                              ₹ {MoneyFormat(data.expense?.toString())}
                             </Typography>
                           </Box>
                         </Box>
@@ -243,8 +238,8 @@ const DashBoard: React.FC = () => {
                             <Typography variant="body1" sx={{ fontSize: '10px' }} >
                               Balance
                             </Typography>
-                            <Typography sx={{ fontSize: "20px", color: data.balance >= 0 ? 'red' : 'green' }}>
-                              ₹ {data.balance}
+                            <Typography sx={{ fontSize: "20px", color: data.balance < 0 ? 'red' : 'green' }}>
+                              ₹ {MoneyFormat(data.balance?.toString())}
                             </Typography>
                           </Box>
                         </Box>
@@ -259,6 +254,32 @@ const DashBoard: React.FC = () => {
             </Box>
           </Box>
 
+          <Grid container>
+            <Grid xs={12} sm={6} sx={{ p: 1 }}>
+              <Card >
+                <CardContent>
+                  {transactions ? (
+                    <HorizontalBarChart transactions={transactions} TransactionType='Income' />
+                  ) : (
+                    <Typography>No transactions available</Typography>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid xs={12} sm={6} sx={{ p: 1 }}>
+
+              <Card>
+                <CardContent>
+                  {transactions ? (
+                    <HorizontalBarChart transactions={transactions} TransactionType='Expense' />
+                  ) : (
+                    <Typography>No transactions available</Typography>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+
+          </Grid>
           <Typography variant="h6" sx={{ textAlign: 'center' }}>Income and Expense Over Time</Typography>
           <Card>
             <CardContent sx={{ m: 1, padding: 2 }}>
@@ -315,3 +336,5 @@ const DashBoard: React.FC = () => {
 };
 
 export default DashBoard;
+
+

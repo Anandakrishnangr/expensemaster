@@ -57,7 +57,13 @@ const CreateTransaction: React.FC = () => {
     const [transactionType, setTransactionType] = useState<string>('Income');
     let Dispatch = useDispatch()
     const queryClient = useQueryClient();
-    const handleClose = () => Dispatch(openCreateTransactinModal({ open: false, id: null, data: null }))
+    const handleClose = () => {
+        Dispatch(openCreateTransactinModal({ open: false, id: null, data: null }))
+        setDescription('')
+        setAmount(0)
+        setCategoryID(null)
+        setTransactionDate('')
+    }
 
     const createTransaction = async (transaction: TransactionData): Promise<void> => {
         delete transaction.id

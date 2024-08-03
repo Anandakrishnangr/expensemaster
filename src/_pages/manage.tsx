@@ -84,9 +84,9 @@ const Manage: React.FC = () => {
                 <Box sx={{ p: 2 }}>
                     <Grid container sx={{ m: 0, width: '100%' }}>
                         {categories?.map((category) => (
-                            <Grid item xs={12} sm={6} md={4} lg={3} key={category.id} sx={{margin:0}}>
-                                <Card>
-                                    <CardContent sx={{p:0,pb:0}}>
+                            <Grid item xs={12} sm={6} md={4} lg={3} key={category.id} sx={{margin:0,padding:1}}>
+                                <Card sx={{p:0}}>
+                                    <CardContent sx={{p:0,pb:0,padding:"5px !important"}}>
                                         <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
                                             <Button onClick={() => handleEdit(category.id, category)}>
                                                 <CreateIcon />

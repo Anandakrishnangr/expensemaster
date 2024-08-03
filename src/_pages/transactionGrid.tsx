@@ -23,7 +23,7 @@ import {
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { openCreateTransactinModal } from '../redux/modalSlice';
-
+import ReceiptIcon from '@mui/icons-material/Receipt';
 export interface Transaction {
     id: number;
     Amount: number;
@@ -138,9 +138,12 @@ const TransactionDataGrid: React.FC = () => {
     return (
         <Container maxWidth="lg">
             <Box>
-                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "5px" }}>
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "5px",p:1 }}>
+                    <Box sx={{display:"flex",alignItems:"center"}}>
+                        <ReceiptIcon color='success' sx={{marginRight:'10px'}} /> All Transactions
+                    </Box>
                     <Button sx={{ whiteSpace: "nowrap", pl: 3, pr: 3, fontSize: "12px" }} variant='contained' onClick={handleCreateTransaction}>Create Trasaction</Button>
-                    <TextField
+                    {/* <TextField
                         size='small'
                         label="Search"
                         variant="outlined"
@@ -148,7 +151,7 @@ const TransactionDataGrid: React.FC = () => {
                         margin="normal"
                         value={searchText}
                         onChange={handleSearch}
-                    />
+                    /> */}
                 </Box>
                 {isLoading ? (
                     <CircularProgress />

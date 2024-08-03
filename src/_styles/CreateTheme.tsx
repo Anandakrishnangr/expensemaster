@@ -40,8 +40,8 @@ const darkTheme = createTheme({
         background: {
             // default: '#282828',
             // paper: '#1d1d1d',
-            default: 'black',
-            paper: 'black',
+            default: '#000000',
+            paper: '#000000',
         },
         text: {
             primary: '#ffffff',
