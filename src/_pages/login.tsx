@@ -61,8 +61,8 @@ const Login: React.FC = () => {
     };
 
     return (
-        <Container sx={{ boxShadow: "none" }} component="main" maxWidth="xs">
-            <Box sx={{ mt: 3, p: 3 }}>
+        <Container component="main" maxWidth="xs">
+            <Paper elevation={3} sx={{ mt: 3, p: 3 }}>
                 <Typography variant="h4" gutterBottom>
                     Login
                 </Typography>
@@ -98,7 +98,7 @@ const Login: React.FC = () => {
                 <Button onClick={handleSubmit} variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
                     Login
                 </Button>
-            </Box>
+            </Paper>
         </Container>
     );
 };
