@@ -68,8 +68,20 @@ const Manage: React.FC = () => {
 
     return (
         <>
-            <Box sx={{ m: 1, height: "100vh", border: '1px solid black' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', border: '1px solid black', padding: 1 }}>
+            <Box sx={{
+                background: "transparent", boxShadow: `
+    inset 0 0 0.5px 1px hsla(0, 0%, 100%, 0.075),
+    0 0 0 1px hsla(0, 0%, 0%, 0.05),
+    0 0.3px 0.4px hsla(0, 0%, 0%, 0.02),
+    0 0.9px 1.5px hsla(0, 0%, 0%, 0.045),
+    0 3.5px 6px hsla(0, 0%, 0%, 0.09)`,
+                minHeight: "50vh",
+            }}>
+                <Box sx={{
+                    display: 'flex', justifyContent: 'space-between',
+                    //  border: '1px solid black', 
+                    padding: 1
+                }}>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <CallMadeIcon color='success' />
                         <Typography sx={{ fontSize: '20px', fontFamily: 'cursive', fontWeight: 'bold' }}>
@@ -84,15 +96,15 @@ const Manage: React.FC = () => {
                 <Box sx={{ p: 2 }}>
                     <Grid container sx={{ m: 0, width: '100%' }}>
                         {categories?.map((category) => (
-                            <Grid item xs={12} sm={6} md={4} lg={3} key={category.id} sx={{margin:0,padding:1}}>
-                                <Card sx={{p:0}}>
-                                    <CardContent sx={{p:0,pb:0,padding:"5px !important"}}>
+                            <Grid item xs={12} sm={6} md={4} lg={3} key={category.id} sx={{ margin: 0, padding: 1 }}>
+                                <Card sx={{ p: 0 }}>
+                                    <CardContent sx={{ p: 0, pb: 0, padding: "5px !important" }}>
                                         <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
                                             <Button onClick={() => handleEdit(category.id, category)}>
                                                 <CreateIcon />
                                             </Button>
                                         </Box>
-                                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 2 ,fontWeight:"900",fontSize:"px"}}>
+                                        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 2, fontWeight: "900", fontSize: "px" }}>
                                             {category.Name}
                                         </Box>
                                         <Typography>{category.Description}</Typography>
