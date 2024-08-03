@@ -8,9 +8,9 @@ import MapComponent from '../map/mapComponent';
 import { Avatar, Button, Card, CardContent, Menu, MenuItem, Switch, Tab, Typography, styled } from '@mui/material';
 import { Logout, Password } from '@mui/icons-material';
 import axiosInstance from '../../_utils/axios';
-import { persistor } from '../../redux/store';
+import { persistor, RootState } from '../../redux/store';
 import { showSuccessSnackbar } from '../snackbar/Snackbar';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { openChangePassword, openCreateTransactinModal } from '../../redux/modalSlice';
 import CreateTransaction from '../../_pages/createTransactions';
 
@@ -70,7 +70,7 @@ export default function LabTabs({ theme }: Labtbs) {
     console.log(location);
     const [value, setValue] = React.useState(location.pathname);
     let navigate = useNavigate();
-
+    const user = useSelector((state: RootState) => state.auth.username);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         console.log(newValue);
@@ -143,30 +143,37 @@ export default function LabTabs({ theme }: Labtbs) {
                         onClose={handleClose}
                         sx={{ pt: 0, pb: 0 }}
                     >
-                        <MenuItem sx={{ pt: 0, pb: 0 }} onClick={handleLogout}>
-                            <Button sx={{ m: 0, p: 0 }} startIcon={<Logout />}>Logout</Button>
+                        <MenuItem sx={{ pt: 0, pb: 0 }} onClick={() => navigate('/aboutus')}>
+                            <Button sx={{ m: 0, p: 0 }} startIcon={<Password />}>About us</Button>
                         </MenuItem>
                         <MenuItem sx={{ pt: 0, pb: 0 }} onClick={handleChangePassword}>
                             <Button sx={{ m: 0, p: 0 }} startIcon={<Password />}>Change Password</Button>
                         </MenuItem>
+                        <MenuItem sx={{ pt: 0, pb: 0 }} onClick={handleLogout}>
+                            <Button sx={{ m: 0, p: 0 }} startIcon={<Logout />}>Logout</Button>
+                        </MenuItem>
                     </Menu>
                 </Box>
-                {TabContent.map((tab, index) => (
-                    <TabPanel key={index} sx={{ p: 0, my: 1 }} value={tab.value}>
-                        <Card sx={{ background: "transparent" }}>
-                            <CardContent sx={{ m: 1, display:"flex",justifyContent:"space-between"}}>
+                {
+                    TabContent.map((tab, index) => (
+                        <TabPanel key={index} sx={{ p: 0, my: 1 }} value={tab.value}>
+                            <Card sx={{ background: "transparent" }}>
+                                <CardContent sx={{ m: 1, display: "flex", justifyContent: "space-between" }}>
 
-                                {tab.label}
+                                    <Box> <Typography sx={{ fontWeight: 800, fontSize: '20px' }}>{tab.label}</Typography>
+                                        {tab.label === 'DashBoard' && `Welcome ${user} !`}
+                                    </Box>
 
-                                {tab.label === 'DashBoard' && <Button sx={{ whiteSpace: "nowrap", pl: 3, pr: 3, fontSize: "12px" }} variant='contained' onClick={handleCreateTransaction}>Create Trasaction</Button>
-                                }
+                                    {tab.label === 'DashBoard' && <Button sx={{ whiteSpace: "nowrap", pl: 3, pr: 3, fontSize: "12px" }} variant='contained' onClick={handleCreateTransaction}>Create Trasaction</Button>
+                                    }
 
-                            </CardContent>
-                        </Card>
-                    </TabPanel>
-                ))}
-            </TabContext>
-        </Box>
+                                </CardContent>
+                            </Card>
+                        </TabPanel>
+                    ))
+                }
+            </TabContext >
+        </Box >
     );
 }
 

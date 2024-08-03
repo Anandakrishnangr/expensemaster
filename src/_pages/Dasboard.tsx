@@ -12,6 +12,7 @@ import { useDispatch } from 'react-redux';
 import { fetchCategories, fetchTransactions } from '../redux/dataSlice';
 import { AppDispatch } from '../redux/store';
 import CreateCategory from './createCategory';
+import AboutUs from './about';
 
 const DashboardHome: React.FC = () => {
 
@@ -73,6 +74,8 @@ const DashboardHome: React.FC = () => {
                         <Route path='/' element={<Dashboard />} />
                         <Route path='/manage' element={<Manage />} />
                         <Route path='/transactions' element={<TransactionDataGrid />} />
+                        <Route path='/aboutus' element={<AboutUs />} />
+
                     </Routes>
                 </Box>
                 <ChangePasswordModal />

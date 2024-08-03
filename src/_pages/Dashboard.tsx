@@ -15,6 +15,8 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PaidIcon from '@mui/icons-material/Paid';
 import HorizontalBarChart from '../_components/graphs/horizontalBar';
 import { Transaction } from './transactionGrid';
+import { loginv2 } from '../redux/authSlice';
+import { useDispatch } from 'react-redux';
 // Register Chart.js components
 Chart.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
 export const MoneyFormat = (number: string) =>
@@ -27,7 +29,11 @@ interface Category {
   TransactionDate: string;
 }
 
-
+interface User {
+  username: string;
+  email: string;
+  // Add other user data properties here
+}
 
 const fetchTransactions = async (): Promise<Transaction[]> => {
   const response = await axiosInstance.get('api/transactions/');
@@ -38,8 +44,14 @@ const fetchCategories = async (): Promise<Category[]> => {
   const response = await axiosInstance.get('api/categories/');
   return response.data;
 };
-
+const fetchUser = async (): Promise<User> => {
+  const response = await axiosInstance.get('/api/user');
+  return response.data;
+};
 const DashBoard: React.FC = () => {
+
+  let dispatch = useDispatch()
+
   const { data: transactions, error: transactionsError, isLoading: isLoadingTransactions } = useQuery<Transaction[]>({
     queryKey: ['transactions'],
     queryFn: fetchTransactions,
@@ -49,6 +61,20 @@ const DashBoard: React.FC = () => {
     queryKey: ['categories'],
     queryFn: fetchCategories,
   });
+  const { data: user, error, isLoading } = useQuery<User,Error>({
+    queryKey: ['user'],
+    queryFn: fetchUser,
+  });
+
+  useEffect(() => {
+    console.log(user)
+    let datas =
+    dispatch(loginv2({ username: user?.username??'' }));
+    return () => {
+
+    }
+  }, [user])
+
 
   const [data, setData] = useState({
     income: 0,
