@@ -39,7 +39,7 @@ const CreateCategory: React.FC = () => {
   const mutation = useMutation<void, unknown, CategoryData>({
     mutationFn: open.id == null ? addCategory : updateCategory,
     onSuccess: () => {
-      showSuccessSnackbar('Category added successfully!');
+      showSuccessSnackbar(`Category ${open.id == null ?"added":"updated"} successfully!`);
       queryClient.invalidateQueries({ queryKey: ['categories'] });
       handleClose()
     },

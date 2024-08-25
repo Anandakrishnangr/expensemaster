@@ -149,7 +149,7 @@ const TransactionDataGrid: React.FC = () => {
                     <Box sx={{ display: "flex", alignItems: "center" }}>
                         <ReceiptIcon color='success' sx={{ marginRight: '10px' }} /> All Transactions
                     </Box>
-                    <Button sx={{ whiteSpace: "nowrap", pl: 3, pr: 3, fontSize: "12px" }} variant='contained' onClick={handleCreateTransaction}>Create Trasaction</Button>
+                    <Button sx={{ whiteSpace: "nowrap", pl: 3, pr: 3, fontSize: "12px" }} variant='contained' onClick={handleCreateTransaction}>Create Transaction</Button>
                     {/* <TextField
                         size='small'
                         label="Search"

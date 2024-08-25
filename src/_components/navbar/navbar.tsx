@@ -6,7 +6,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import MapComponent from '../map/mapComponent';
 import { Avatar, Button, Card, CardContent, Menu, MenuItem, Switch, Tab, Typography, styled } from '@mui/material';
-import { Logout, Password } from '@mui/icons-material';
+import { Info, Logout, Password } from '@mui/icons-material';
 import axiosInstance from '../../_utils/axios';
 import { persistor, RootState } from '../../redux/store';
 import { showSuccessSnackbar } from '../snackbar/Snackbar';
@@ -123,7 +123,7 @@ export default function LabTabs({ theme }: Labtbs) {
             <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', alignItems: "center", justifyContent: "space-between", display: "flex" }}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Typography sx={{ fontSize: "28px" }} style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)', color: "#FFD700", marginLeft: "15px" }}><i>X</i></Typography><span> pence Tracker</span>
+                        <Typography sx={{ fontSize: "28px" }} style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)', color: "#FFD700", marginLeft: "15px" }}><i>X</i></Typography><span> pence Master</span>
                         <TabList onChange={handleChange} aria-label="lab API tabs example">
                             {TabContent.map((tab, index) => (
                                 <Tab key={index} value={tab.value} label={tab.label}></Tab>
@@ -144,7 +144,7 @@ export default function LabTabs({ theme }: Labtbs) {
                         sx={{ pt: 0, pb: 0 }}
                     >
                         <MenuItem sx={{ pt: 0, pb: 0 }} onClick={() => navigate('/aboutus')}>
-                            <Button sx={{ m: 0, p: 0 }} startIcon={<Password />}>About us</Button>
+                            <Button sx={{ m: 0, p: 0 }} startIcon={<Info />}>About us</Button>
                         </MenuItem>
                         <MenuItem sx={{ pt: 0, pb: 0 }} onClick={handleChangePassword}>
                             <Button sx={{ m: 0, p: 0 }} startIcon={<Password />}>Change Password</Button>
@@ -164,7 +164,7 @@ export default function LabTabs({ theme }: Labtbs) {
                                         {tab.label === 'DashBoard' && `Welcome ${user} !`}
                                     </Box>
 
-                                    {tab.label === 'DashBoard' && <Button sx={{ whiteSpace: "nowrap", pl: 3, pr: 3, fontSize: "12px" }} variant='contained' onClick={handleCreateTransaction}>Create Trasaction</Button>
+                                    {tab.label === 'DashBoard' && <Button sx={{ whiteSpace: "nowrap", pl: 3, pr: 3, fontSize: "12px" }} variant='contained' onClick={handleCreateTransaction}>Create Transaction</Button>
                                     }
 
                                 </CardContent>

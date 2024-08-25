@@ -160,7 +160,7 @@ const CreateTransaction: React.FC = () => {
                             label="Amount"
                             type="number"
                             value={amount}
-                            onChange={(e) => setAmount(Number(e.target.value))}
+                            onChange={(e) => setAmount(parseFloat(e.target.value))}
                             required
                             fullWidth
                             margin="normal"

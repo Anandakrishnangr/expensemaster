@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Box, Button, Container, Grid, Paper, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, InputAdornment, Paper, TextField, Typography } from '@mui/material';
 import { loginWithRegister } from '../redux/authSlice';
 import { useDispatch } from 'react-redux';
 import { showSuccessSnackbar, showWarningSnackbar } from '../_components/snackbar/Snackbar';
 import axiosInstance from '../_utils/axios';
 import { useNavigate } from 'react-router-dom';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 
 interface User {
@@ -31,6 +32,8 @@ const registerUser = async (userData: RegisterData): Promise<RegisterResponse> =
 const Register: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<Boolean>(false);
+
   const [user, setUser] = useState<string>('');
   let navigate = useNavigate()
   let dispatch = useDispatch()
@@ -143,10 +146,29 @@ const Register: React.FC = () => {
                 fullWidth
                 variant="outlined"
                 label="Password"
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                InputProps={{ // <-- This is where the toggle button is added.
+                  endAdornment: (
+                    <InputAdornment sx={{cursor:"pointer"}} position="end">
+                              {showPassword ? <Visibility
+                                  onMouseDown={() => {
+                                      setShowPassword(false)
+                                  }}
+                                  onClick={() => {
+                                      setShowPassword(!showPassword)
+                                  }} /> : <VisibilityOff
+                                  onMouseDown={() => {
+                                      setShowPassword(false)
+                                  }}
+                                  onClick={() => {
+                                      setShowPassword(!showPassword)
+                                  }} />}
+                      </InputAdornment>
+                  )
+              }}
               />
             </Grid>
             <Grid item xs={12}>

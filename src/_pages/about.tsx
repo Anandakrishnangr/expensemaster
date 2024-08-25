@@ -47,7 +47,7 @@ const AboutUs: React.FC = () => {
       <Typography variant="body1" paragraph>
         If you have any questions, feedback, or suggestions, please feel free to reach out to us. Your input is valuable in helping us enhance the app and provide you with the best experience possible.
         <br />
-        <strong>Email:</strong> support@expensetracker.com
+        <strong>Email:</strong> support@expensemaster.com
       </Typography>
     </Container>
   );
