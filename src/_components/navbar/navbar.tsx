@@ -123,7 +123,7 @@ export default function LabTabs({ theme }: Labtbs) {
             <TabContext value={value}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', alignItems: "center", justifyContent: "space-between", display: "flex" }}>
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Typography sx={{ fontSize: "28px" }} style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)', color: "#FFD700", marginLeft: "15px" }}><i>X</i></Typography><span> pence Master</span>
+                        <Typography sx={{ fontSize: "28px" }} style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)', color: "#FFD700", marginLeft: "15px" }}><i>X</i></Typography><span> pense Master</span>
                         <TabList onChange={handleChange} aria-label="lab API tabs example">
                             {TabContent.map((tab, index) => (
                                 <Tab key={index} value={tab.value} label={tab.label}></Tab>
