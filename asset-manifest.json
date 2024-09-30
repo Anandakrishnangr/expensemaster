@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Anandakrishnangr/expensemaster/static/css/main.603134f0.css",
+    "main.js": "/Anandakrishnangr/expensemaster/static/js/main.5aa4173f.js",
+    "static/js/453.4adcaa49.chunk.js": "/Anandakrishnangr/expensemaster/static/js/453.4adcaa49.chunk.js",
+    "index.html": "/Anandakrishnangr/expensemaster/index.html",
+    "main.603134f0.css.map": "/Anandakrishnangr/expensemaster/static/css/main.603134f0.css.map",
+    "main.5aa4173f.js.map": "/Anandakrishnangr/expensemaster/static/js/main.5aa4173f.js.map",
+    "453.4adcaa49.chunk.js.map": "/Anandakrishnangr/expensemaster/static/js/453.4adcaa49.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.603134f0.css",
+    "static/js/main.5aa4173f.js"
+  ]
+}
