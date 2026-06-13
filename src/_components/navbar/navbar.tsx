@@ -1,192 +1,318 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+import {
+    Avatar,
+    Box,
+    Button,
+    Card,
+    IconButton,
+    Menu,
+    MenuItem,
+    Tab,
+    Tooltip,
+    Typography,
+    Divider,
+    Stack,
+} from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import MapComponent from '../map/mapComponent';
-import { Avatar, Button, Card, CardContent, Menu, MenuItem, Switch, Tab, Typography, styled } from '@mui/material';
-import { Info, Logout, Password } from '@mui/icons-material';
+import { useLocation, useNavigate } from 'react-router-dom';
+import {
+    AddRounded,
+    InfoOutlined,
+    LogoutRounded,
+    PasswordRounded,
+} from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
+
 import axiosInstance from '../../_utils/axios';
 import { persistor, RootState } from '../../redux/store';
 import { showSuccessSnackbar } from '../snackbar/Snackbar';
-import { useDispatch, useSelector } from 'react-redux';
 import { openChangePassword, openCreateTransactinModal } from '../../redux/modalSlice';
-import CreateTransaction from '../../_pages/createTransactions';
+import ThemeSwitch from './ThemeSwitch';
 
-const MaterialUISwitch = styled(Switch)(({ theme }) => ({
-    width: 58,
-    height: 32,
-    padding: 7,
-    '& .MuiSwitch-switchBase': {
-        margin: 1,
-        padding: 0,
-        transform: 'translateX(6px)',
-        '&.Mui-checked': {
-            color: '#fff',
-            transform: 'translateX(22px)',
-            '& .MuiSwitch-thumb:before': {
-                backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-                    '#fff',
-                )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
-            },
-            '& + .MuiSwitch-track': {
-                opacity: 1,
-                backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
-            },
-        },
-    },
-    '& .MuiSwitch-thumb': {
-        backgroundColor: theme.palette.mode === 'dark' ? '#003892' : '#001e3c',
-        width: 30,
-        height: 30,
-        '&::before': {
-            content: "''",
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            left: 0,
-            top: 0,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'center',
-            backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-                '#fff',
-            )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
-        },
-    },
-    '& .MuiSwitch-track': {
-        opacity: 1,
-        backgroundColor: theme.palette.mode === 'dark' ? '#8796A5' : '#aab4be',
-        borderRadius: 20 / 2,
-    },
-}));
-
-interface Labtbs {
+interface LabTabsProps {
     theme: () => void;
+    isDarkMode?: boolean;
 }
 
-export default function LabTabs({ theme }: Labtbs) {
-    let location = useLocation();
-    console.log(location);
-    const [value, setValue] = React.useState(location.pathname);
-    let navigate = useNavigate();
+const TAB_CONTENT = [
+    { label: 'Dashboard', value: '/' },
+    { label: 'Transactions', value: '/transactions' },
+    { label: 'Manage', value: '/manage' },
+    { label: 'Rooms', value: '/rooms' },
+];
+
+const TAB_SUBTITLES: Record<string, string> = {
+    '/': 'Your financial overview at a glance',
+    '/transactions': 'Browse, filter and manage every entry',
+    '/manage': 'Organize your spending categories',
+    '/rooms': 'Split expenses with friends in shared rooms',
+};
+
+export default function LabTabs({ theme, isDarkMode = false }: LabTabsProps) {
+    const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.auth.username);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        console.log(newValue);
-        setValue(newValue);
-        navigate(newValue, {
-            state: {
-                newValue
-            }
-        });
+    // Map sub-routes (e.g. /rooms/FNX-7K3) to their parent tab so the right tab stays highlighted.
+    const matchTab = (path: string): string => {
+        const exact = TAB_CONTENT.find((t) => t.value === path);
+        if (exact) return exact.value;
+        const parent = TAB_CONTENT.find((t) => t.value !== '/' && path.startsWith(t.value + '/'));
+        return parent ? parent.value : '/';
     };
 
-    const TabContent = [
-        { label: "DashBoard", value: "/" },
-        { label: "Transactions", value: "/transactions" },
-        { label: "Manage", value: "/manage" }
-    ];
+    const [value, setValue] = React.useState(matchTab(location.pathname));
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
+    React.useEffect(() => {
+        setValue(matchTab(location.pathname));
+    }, [location.pathname]);
+
+    const handleChange = (_: React.SyntheticEvent, newValue: string) => {
+        setValue(newValue);
+        navigate(newValue, { state: { newValue } });
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+    const handleMenuClose = () => setAnchorEl(null);
 
     const handleLogout = () => {
-        // Add your logout logic here
-        axiosInstance.post("/api/logout/")
-            .then(res => {
-                persistor.purge(); //
-                localStorage.clear()
-                showSuccessSnackbar("Signed out !")
+        axiosInstance.post('/api/logout/').then(() => {
+            persistor.purge();
+            localStorage.clear();
+            showSuccessSnackbar('Signed out!');
+        });
+        handleMenuClose();
+    };
 
-            })
-        handleClose();
-    };
-    let dispatch = useDispatch()
     const handleChangePassword = () => {
-        // Add your logout logic here
-        console.log('Change Password');
-        dispatch(openChangePassword({ open: true }))
-        handleClose();
+        dispatch(openChangePassword({ open: true }));
+        handleMenuClose();
     };
+
     const handleCreateTransaction = () => {
         dispatch(openCreateTransactinModal({ open: true, id: null, data: null }));
     };
+
+    const userInitial = (user || 'U').charAt(0).toUpperCase();
+
     return (
-        <Box sx={{ width: '100%', typography: 'body1' }}>
+        <Box sx={{ width: '100%' }}>
             <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider', alignItems: "center", justifyContent: "space-between", display: "flex" }}>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Typography sx={{ fontSize: "28px" }} style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)', color: "#FFD700", marginLeft: "15px" }}><i>X</i></Typography><span> pense Master</span>
-                        <TabList onChange={handleChange} aria-label="lab API tabs example">
-                            {TabContent.map((tab, index) => (
-                                <Tab key={index} value={tab.value} label={tab.label}></Tab>
+                <Card
+                    elevation={0}
+                    sx={(t) => ({
+                        mb: { xs: 3, sm: 4 },
+                        px: { xs: 2, sm: 3, md: 3.5 },
+                        py: { xs: 1.75, sm: 2 },
+                        borderRadius: 3,
+                        border: `2px solid ${t.palette.divider}`,
+                        boxShadow: `5px 5px 0 0 ${t.palette.divider}`,
+                        backgroundColor: t.palette.background.paper,
+                    })}
+                >
+                    <Stack
+                        direction='row'
+                        alignItems='center'
+                        justifyContent='space-between'
+                        gap={2}
+                    >
+                        {/* Brand */}
+                        <Stack direction='row' alignItems='center' gap={1.25} sx={{ flexShrink: 0 }}>
+                            <Box
+                                sx={(t) => ({
+                                    width: 42,
+                                    height: 42,
+                                    borderRadius: 1.5,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    backgroundColor: '#fcd34d',
+                                    color: '#0a0a0a',
+                                    fontWeight: 900,
+                                    fontSize: 22,
+                                    lineHeight: 1,
+                                    letterSpacing: '-0.04em',
+                                    border: `2px solid ${t.palette.divider}`,
+                                    boxShadow: `3px 3px 0 0 ${t.palette.divider}`,
+                                })}
+                            >
+                                X
+                            </Box>
+                            <Typography
+                                variant='h6'
+                                sx={{
+                                    fontWeight: 800,
+                                    letterSpacing: '-0.02em',
+                                    color: 'text.primary',
+                                    display: { xs: 'none', sm: 'block' },
+                                    lineHeight: 1,
+                                }}
+                            >
+                                pense&nbsp;Master
+                            </Typography>
+                        </Stack>
+
+                        {/* Tabs (centered on md+) */}
+                        <Box
+                            sx={{
+                                flex: 1,
+                                display: { xs: 'none', md: 'flex' },
+                                justifyContent: 'center',
+                            }}
+                        >
+                            <TabList
+                                onChange={handleChange}
+                                aria-label='primary navigation'
+                                sx={{
+                                    minHeight: 40,
+                                    '& .MuiTabs-flexContainer': { gap: 1.5 },
+                                }}
+                            >
+                                {TAB_CONTENT.map((tab) => (
+                                    <Tab key={tab.value} value={tab.value} label={tab.label} />
+                                ))}
+                            </TabList>
+                        </Box>
+
+                        {/* Actions */}
+                        <Stack direction='row' alignItems='center' gap={1.25} sx={{ flexShrink: 0 }}>
+                            <Tooltip title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}>
+                                <Box sx={{ display: 'flex' }}>
+                                    <ThemeSwitch checked={isDarkMode} onChange={theme} />
+                                </Box>
+                            </Tooltip>
+                            <Tooltip title='Account'>
+                                <IconButton
+                                    onClick={handleMenuOpen}
+                                    sx={{
+                                        p: 0,
+                                        border: 'none',
+                                        boxShadow: 'none',
+                                        backgroundColor: 'transparent',
+                                        '&:hover': {
+                                            transform: 'none',
+                                            boxShadow: 'none',
+                                            backgroundColor: 'transparent',
+                                        },
+                                        '&:active': { transform: 'none', boxShadow: 'none' },
+                                    }}
+                                >
+                                    <Avatar
+                                        sx={(t) => ({
+                                            height: 38,
+                                            width: 38,
+                                            fontSize: 16,
+                                            boxShadow: `3px 3px 0 0 ${t.palette.divider}`,
+                                        })}
+                                    >
+                                        {userInitial}
+                                    </Avatar>
+                                </IconButton>
+                            </Tooltip>
+                        </Stack>
+                    </Stack>
+
+                    {/* Mobile/Tablet tabs row */}
+                    <Box sx={{ display: { xs: 'block', md: 'none' }, mt: 1.5 }}>
+                        <TabList
+                            onChange={handleChange}
+                            variant='scrollable'
+                            allowScrollButtonsMobile
+                            sx={{
+                                minHeight: 40,
+                                '& .MuiTabs-flexContainer': { gap: 1 },
+                            }}
+                        >
+                            {TAB_CONTENT.map((tab) => (
+                                <Tab key={tab.value} value={tab.value} label={tab.label} />
                             ))}
                         </TabList>
                     </Box>
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <MaterialUISwitch onChange={theme} />
-                        <Avatar sx={{ height: "28px", width: "28px" }}
-                            onClick={handleClick}
-                            style={{ cursor: 'pointer' }}
-                        />
-                    </Box>
+
                     <Menu
                         anchorEl={anchorEl}
                         open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                        sx={{ pt: 0, pb: 0 }}
+                        onClose={handleMenuClose}
+                        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                     >
-                        <MenuItem sx={{ pt: 0, pb: 0 }} onClick={() => navigate('/aboutus')}>
-                            <Button sx={{ m: 0, p: 0 }} startIcon={<Info />}>About us</Button>
+                        <Box sx={{ px: 1.5, py: 1 }}>
+                            <Typography variant='subtitle2' sx={{ fontWeight: 800 }}>
+                                {user || 'Guest'}
+                            </Typography>
+                            <Typography variant='caption' color='text.secondary'>
+                                Signed in
+                            </Typography>
+                        </Box>
+                        <Divider sx={{ my: 0.5 }} />
+                        <MenuItem onClick={() => { navigate('/aboutus'); handleMenuClose(); }}>
+                            <InfoOutlined fontSize='small' style={{ marginRight: 10 }} /> About us
                         </MenuItem>
-                        <MenuItem sx={{ pt: 0, pb: 0 }} onClick={handleChangePassword}>
-                            <Button sx={{ m: 0, p: 0 }} startIcon={<Password />}>Change Password</Button>
+                        <MenuItem onClick={handleChangePassword}>
+                            <PasswordRounded fontSize='small' style={{ marginRight: 10 }} /> Change Password
                         </MenuItem>
-                        <MenuItem sx={{ pt: 0, pb: 0 }} onClick={handleLogout}>
-                            <Button sx={{ m: 0, p: 0 }} startIcon={<Logout />}>Logout</Button>
+                        <MenuItem
+                            onClick={handleLogout}
+                            sx={{
+                                color: 'text.primary',
+                                '&:hover': { backgroundColor: '#ef4444', color: '#fff' },
+                            }}
+                        >
+                            <LogoutRounded fontSize='small' style={{ marginRight: 10 }} /> Logout
                         </MenuItem>
                     </Menu>
-                </Box>
-                {
-                    TabContent.map((tab, index) => (
-                        <TabPanel key={index} sx={{ p: 0, my: 1 }} value={tab.value}>
-                            <Card sx={{ background: "transparent" }}>
-                                <CardContent sx={{ m: 1, display: "flex", justifyContent: "space-between" }}>
+                </Card>
 
-                                    <Box> <Typography sx={{ fontWeight: 800, fontSize: '20px' }}>{tab.label}</Typography>
-                                        {tab.label === 'DashBoard' && `Welcome ${user} !`}
-                                    </Box>
-
-                                    {tab.label === 'DashBoard' && <Button sx={{ whiteSpace: "nowrap", pl: 3, pr: 3, fontSize: "12px" }} variant='contained' onClick={handleCreateTransaction}>Create Transaction</Button>
-                                    }
-
-                                </CardContent>
-                            </Card>
-                        </TabPanel>
-                    ))
-                }
-            </TabContext >
-        </Box >
+                {TAB_CONTENT.map((tab) => (
+                    <TabPanel
+                        key={tab.value}
+                        value={tab.value}
+                        sx={{ p: 0, mb: { xs: 2.5, sm: 3.5 } }}
+                    >
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: { xs: 'flex-start', sm: 'center' },
+                                flexDirection: { xs: 'column', sm: 'row' },
+                                gap: 2,
+                                px: { xs: 0.5, sm: 1 },
+                                py: { xs: 0.5, sm: 1 },
+                            }}
+                        >
+                            <Box sx={{ minWidth: 0 }}>
+                                <Typography variant='h4' sx={{ fontWeight: 800, lineHeight: 1.15 }}>
+                                    {tab.label === 'Dashboard' && user
+                                        ? `Welcome back, ${user}`
+                                        : tab.label}
+                                </Typography>
+                                <Typography
+                                    variant='body2'
+                                    color='text.secondary'
+                                    sx={{ mt: 0.75, fontWeight: 600 }}
+                                >
+                                    {TAB_SUBTITLES[tab.value]}
+                                </Typography>
+                            </Box>
+                            {tab.label === 'Dashboard' && (
+                                <Button
+                                    variant='contained'
+                                    color='primary'
+                                    startIcon={<AddRounded />}
+                                    onClick={handleCreateTransaction}
+                                    sx={{ flexShrink: 0 }}
+                                >
+                                    New transaction
+                                </Button>
+                            )}
+                        </Box>
+                    </TabPanel>
+                ))}
+            </TabContext>
+        </Box>
     );
 }
-
-interface TabProps {
-    item: {
-        label: string;
-        value: string;
-    };
-    index: number;
-}
-
-const TabComponent: React.FC<TabProps> = ({ item, index }) => {
-    const { label, value } = item;
-    console.log(label, value, index);
-    return <Tab label={label} value={value} />;
-};
